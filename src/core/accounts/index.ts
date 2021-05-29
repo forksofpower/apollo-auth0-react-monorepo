@@ -2,7 +2,7 @@ import { getManager } from "typeorm"
 import { Account } from "../account"
 
 /**
- * User repository helper
+ * Account repository helper
  */
 const accountRepo = () => getManager().getRepository<Account>('Account');
 
