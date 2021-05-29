@@ -1,9 +1,8 @@
-import { ApolloServer } from 'apollo-server-express';
+import express from 'express';
 import bodyParser from 'body-parser';
 import cors from 'cors';
-import express, { application, Request, Response } from 'express';
+import { ApolloServer } from 'apollo-server-express';
 import { createConnection } from 'typeorm';
-import { User, Users } from './core';
 import schema from "./graphql/schema";
 
 const port = 3000;
