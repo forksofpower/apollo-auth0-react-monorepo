@@ -22,7 +22,8 @@ export const listAll = async (): Promise<User[]> => {
 export const findById = async (id: string): Promise<User> => {
     const repo = getManager().getRepository<User>('User');
 
-    return await repo.findOne(id);
+    console.log(`ID: ${id}`);
+    return await repo.findOne(parseInt(id));
 }
 
 /**
@@ -68,7 +69,7 @@ export const update = async (id: string, params: UpdateParams): Promise<User> =>
 
 export const destroy = async (id: string): Promise<User> => {
     const repo = getManager().getRepository<User>('User');
-    const user = findById(id);
+    const user = await findById(id);
     
     await repo.delete(id);
     
