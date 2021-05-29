@@ -1,43 +1,18 @@
 import { IResolvers } from "graphql-tools";
-import { Users } from "../core";
+
+import {
+    userCreate, userUpdate, userDestroy, usersFindOne, usersListAll
+} from './resolvers/user';
 
 const resolvers: IResolvers = {
     Query: {
-        usersListAll: async () => {
-            const users = await Users.listAll();
-
-            return { users };
-        },
-        usersFindOne: async (
-            _parent: unknown,
-            { input: { userId }}
-            ) => {
-            const user = await Users.findById(userId);
-
-            return user;
-        }
+        usersFindOne,
+        usersListAll
     },
     Mutation: {
-        userCreate: async (
-            _parent: unknown,
-            { input: { user }}
-        ) => {
-            return await Users.create(user);
-        },
-        userUpdate: async (
-            _parent: unknown,
-            { input: { user }}
-        ) => {
-            const id = user.id;
-            delete user.id; // strip out fields that shouldn't be updated?
-            return await Users.update(id, user);
-        },
-        userDestroy: async (
-            _parent: unknown,
-            { input: { userId }}
-        ) => {
-            return await Users.destroy(userId);
-        }
+        userCreate,
+        userUpdate,
+        userDestroy
     }
 }
 

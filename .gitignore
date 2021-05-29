@@ -2,3 +2,4 @@
 dist/
 .idea
 *.sqlite
+.DS_STORE
