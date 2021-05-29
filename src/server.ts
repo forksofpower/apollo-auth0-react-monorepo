@@ -4,6 +4,7 @@ import cors from 'cors';
 import { ApolloServer } from 'apollo-server-express';
 import { createConnection } from 'typeorm';
 import schema from "./graphql/schema";
+import logger from "morgan";
 
 const port = 3000;
 
@@ -15,9 +16,11 @@ const server = new ApolloServer({
 });
 
 /* Middleware */
-app.use(bodyParser.json());
+app.use(express.json());
 
 app.use("*", cors());
+
+app.use(logger('dev'));
 
 server.applyMiddleware({ app, cors: true });
 
