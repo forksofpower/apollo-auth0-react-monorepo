@@ -1,5 +1,5 @@
 import { IResolvers } from "graphql-tools";
-import { User, Users } from "../core";
+import { Users } from "../core";
 
 const resolvers: IResolvers = {
     Query: {

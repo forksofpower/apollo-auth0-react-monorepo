@@ -1,4 +1,4 @@
-import { DeleteResult, getManager } from "typeorm"
+import { getManager } from "typeorm"
 import { User } from "../user"
 
 /**
