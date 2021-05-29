@@ -2,17 +2,18 @@ import gql from "graphql-tag";
 
 export default gql`
     input UserInput {
-        id: String
+        id: Int
         email: String!
         firstName: String!
         lastName: String!
     }
     type UserResponse {
-        id: String!
+        id: Int!
         email: String!
         firstName: String!
         lastName: String!
     }
+
     input UserCreateInput {
         user: UserInput!
     }
@@ -20,10 +21,10 @@ export default gql`
         user: UserInput!
     }
     input UserDestroyInput {
-        userId: String!
+        userId: Int!
     }
     input UsersFindOneInput {
-        userId: String!
+        userId: Int!
     }
     type UsersListAllResponse {
         users: [UserResponse!]!

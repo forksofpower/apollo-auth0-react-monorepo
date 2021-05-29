@@ -1,10 +1,11 @@
 import { IResolvers } from "graphql-tools";
+import { Resolvers } from "./generated";
 
 import {
     userCreate, userUpdate, userDestroy, usersFindOne, usersListAll
 } from './resolvers/user';
 
-const resolvers: IResolvers = {
+const resolvers: Resolvers = {
     Query: {
         usersFindOne,
         usersListAll

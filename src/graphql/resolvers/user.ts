@@ -1,16 +1,24 @@
 import { Users } from "../../core";
+import { 
+    MutationUserCreateArgs,
+    MutationUserDestroyArgs,
+    MutationUserUpdateArgs,
+    QueryUsersFindOneArgs,
+    UserResponse,
+    UsersListAllResponse
+} from "../generated";
 
 export const userCreate = async (
     _parent: unknown,
-    { input: { user }}
-) => {
+    { input: { user }}: MutationUserCreateArgs
+): Promise<UserResponse> => {
     return await Users.create(user);
 };
 
 export const userUpdate = async (
     _parent: unknown,
-    { input: { user }}
-) => {
+    { input: { user }}: MutationUserUpdateArgs
+): Promise<UserResponse> => {
     const id = user.id;
     delete user.id; // strip out fields that shouldn't be updated?
     return await Users.update(id, user);
@@ -18,12 +26,12 @@ export const userUpdate = async (
 
 export const userDestroy = async (
     _parent: unknown,
-    { input: { userId }}
-) => {
+    { input: { userId }}: MutationUserDestroyArgs
+): Promise<UserResponse> => {
     return await Users.destroy(userId);
 };
 
-export const usersListAll = async () => {
+export const usersListAll = async (): Promise<UsersListAllResponse> => {
     const users = await Users.listAll();
 
     return { users };
@@ -31,8 +39,8 @@ export const usersListAll = async () => {
 
 export const usersFindOne = async (
     _parent: unknown,
-    { input: { userId }}
-    ) => {
+    { input: { userId }}: QueryUsersFindOneArgs
+): Promise<UserResponse> => {
     const user = await Users.findById(userId);
 
     return user;

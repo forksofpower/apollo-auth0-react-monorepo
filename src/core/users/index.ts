@@ -2,13 +2,18 @@ import { getManager } from "typeorm"
 import { User } from "../user"
 
 /**
+ * User repository helper
+ */
+const userRepo = () => getManager().getRepository<User>('User');
+
+/**
  * List all Users
  * 
  * @returns User[]
  */
 
 export const listAll = async (): Promise<User[]> => {
-    const repo = getManager().getRepository<User>('User');
+    const repo = userRepo();
     
     return await repo.find();
 }
@@ -19,11 +24,11 @@ export const listAll = async (): Promise<User[]> => {
  * @param id 
  * @returns User
  */
-export const findById = async (id: string): Promise<User> => {
-    const repo = getManager().getRepository<User>('User');
+export const findById = async (id: number): Promise<User> => {
+    const repo = userRepo();
 
     console.log(`ID: ${id}`);
-    return await repo.findOne(parseInt(id));
+    return await repo.findOne(id);
 }
 
 /**
@@ -38,7 +43,7 @@ export interface CreateParams {
     lastName: string;
 }
 export const create = async (params: CreateParams): Promise<User> => {
-    const repo = getManager().getRepository<User>('User');
+    const repo = userRepo();
     const user = await repo.create(params);
     
     return await repo.save(user);
@@ -52,9 +57,9 @@ export interface UpdateParams {
     firstName?: string;
     lastName?: string;
 }
-export const update = async (id: string, params: UpdateParams): Promise<User> => {
+export const update = async (id: number, params: UpdateParams): Promise<User> => {
     const user = await findById(id);
-    const repo = getManager().getRepository<User>('User');
+    const repo = userRepo();
 
     repo.merge(user, params);
     return await repo.save(user);
@@ -67,8 +72,8 @@ export const update = async (id: string, params: UpdateParams): Promise<User> =>
  * @returns 
  */
 
-export const destroy = async (id: string): Promise<User> => {
-    const repo = getManager().getRepository<User>('User');
+export const destroy = async (id: number): Promise<User> => {
+    const repo = userRepo();
     const user = await findById(id);
     
     await repo.delete(id);

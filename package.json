@@ -7,11 +7,16 @@
   "scripts": {
     "start": "tsc && node dist/server.js",
     "db:migration:gen": "ts-node ./node_modules/.bin/typeorm migration:generate",
-    "db:migrate": "ts-node ./node_modules/.bin/typeorm migration:run"
+    "db:migrate": "ts-node ./node_modules/.bin/typeorm migration:run",
+    "schema:gen": "graphql-codegen --config codegen.yml"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@graphql-codegen/cli": "1.21.5",
+    "@graphql-codegen/introspection": "1.18.2",
+    "@graphql-codegen/typescript": "1.22.1",
+    "@graphql-codegen/typescript-resolvers": "^1.19.2",
     "@types/express": "^4.17.12",
     "@types/node": "^15.6.1",
     "graphql-import-node": "^0.0.4",
