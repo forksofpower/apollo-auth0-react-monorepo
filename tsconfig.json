@@ -1,15 +1,17 @@
 {
     "compilerOptions": {
+      "lib": ["ES5"],
       "module": "commonjs",
+      "declaration": true,
+      // "isolatedModules": false,
+      "experimentalDecorators": true,
+      "emitDecoratorMetadata": true,
       "esModuleInterop": true,
-      "target": "es6",
+      "target": "es5",
       "moduleResolution": "node",
       "sourceMap": true,
-      "outDir": "dist"
-    },
-    "lib": ["es2015"],
-    "include": [
-        "src/**/*.ts",
-        "src/**/*.d.ts",
-      ]
+      "rootDir": "src",
+      "outDir": "dist",
+      "skipLibCheck": true,
+    }
   }
