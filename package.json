@@ -7,7 +7,8 @@
   ],
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start:api": "yarn workspace @graphql-fun/api start"
+    "start:api": "yarn workspace api start",
+    "start:web": "yarn workspace web start"
   },
   "repository": {
     "type": "git",

@@ -10,7 +10,7 @@ import { auth, requiresAuth } from "express-openid-connect";
 import { Accounts } from './core';
 import { VerifyOptions } from 'jsonwebtoken';
 
-const port = 3000;
+const port = 4000;
 
 const app = express();
 
