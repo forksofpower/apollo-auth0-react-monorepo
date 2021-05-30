@@ -1,20 +1,11 @@
-import React, { useEffect } from "react";
+import React from "react";
 import "./App.css";
+import useUsers from "./hooks/useUsers";
 import UserList from "./UserList";
-import { User, useUsersListAllQuery } from "./graphql";
-
-const useUserList = () => {
-  const { loading, data, error } = useUsersListAllQuery();
-  return {
-    loading,
-    error,
-    users: data?.usersListAll.users as User[],
-  };
-};
 
 const App: React.FC = () => {
-  const { loading, users } = useUserList();
-  return <div>{!loading && <UserList users={users} />}</div>;
+  const { userList, usersLoading } = useUsers();
+  return <div>{!usersLoading && <UserList users={userList} />}</div>;
 };
 
 export default App;
