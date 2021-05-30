@@ -5,8 +5,11 @@ import {
     MutationUserDestroyArgs,
     MutationUserUpdateArgs,
     QueryUsersFindOneArgs,
-    UserResponse,
-    UsersListAllResponse
+    UserCreateResponse,
+    UserDestroyResponse,
+    UsersFindOneResponse,
+    UsersListAllResponse,
+    UserUpdateResponse,
 } from "../generated";
 
 export type AuthenticatedContext = {
@@ -18,32 +21,35 @@ export const userCreate = async (
     _parent: unknown,
     { input: { user }}: MutationUserCreateArgs,
     context: AuthenticatedContext
-): Promise<UserResponse> => {
+): Promise<UserCreateResponse> => {
     if (!context.account) {
         throw new AuthenticationError('The request is not authenticated.');
     }
-    return await Users.create(user);
+    const result = await Users.create(user);
+    return { user: result }
 };
 
 export const userUpdate = async (
     _parent: unknown,
     { input: { user }}: MutationUserUpdateArgs,
     context: AuthenticatedContext
-): Promise<UserResponse> => {
+): Promise<UserUpdateResponse> => {
     if (!context.account) {
         throw new AuthenticationError('The request is not authenticated.');
     }
     const id = user.id;
     delete user.id; // strip out fields that shouldn't be updated?
-    return await Users.update(id, user);
+    const result = await Users.update(id, user);
+    return { user: result }
 };
 
 export const userDestroy = async (
     _parent: unknown,
     { input: { userId }}: MutationUserDestroyArgs,
     context: AuthenticatedContext
-): Promise<UserResponse> => {
-    return await Users.destroy(userId);
+): Promise<UserDestroyResponse> => {
+    const result = await Users.destroy(userId);
+    return { user: result }
 };
 
 export const usersListAll = async (
@@ -63,11 +69,11 @@ export const usersFindOne = async (
     _parent: unknown,
     { input: { userId }}: QueryUsersFindOneArgs,
     context: AuthenticatedContext
-): Promise<UserResponse> => {
+): Promise<UsersFindOneResponse> => {
     if (!context.account) {
         throw new AuthenticationError('The request is not authenticated.');
     }
     const user = await Users.findById(userId);
 
-    return user;
+    return { user };
 }

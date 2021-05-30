@@ -1425,6 +1425,28 @@
     lodash "~4.17.0"
     tslib "~2.2.0"
 
+"@graphql-codegen/typescript-operations@^1.18.0":
+  version "1.18.0"
+  resolved "https://registry.yarnpkg.com/@graphql-codegen/typescript-operations/-/typescript-operations-1.18.0.tgz#04c007df476948ff972daed69c73a77a922c8968"
+  integrity sha512-Q4b+jySBgU39uYzSWQcHBn/q5j/gs2yUQGNiCXhV8IIHDJJNR0Zfb2ywY6AMwT7N3rgXmFuIzKAA++xBf2yKRw==
+  dependencies:
+    "@graphql-codegen/plugin-helpers" "^1.18.7"
+    "@graphql-codegen/typescript" "^1.22.1"
+    "@graphql-codegen/visitor-plugin-common" "1.21.0"
+    auto-bind "~4.0.0"
+    tslib "~2.2.0"
+
+"@graphql-codegen/typescript-react-apollo@^2.2.5":
+  version "2.2.5"
+  resolved "https://registry.yarnpkg.com/@graphql-codegen/typescript-react-apollo/-/typescript-react-apollo-2.2.5.tgz#e561d77c3c1cfe32e42ab34c08d517bffc5e9f30"
+  integrity sha512-W9YI6qg6TwjD5CD+rQBmbZjwkA88MKc/9i31xvH2xGgdwzY1ybaTL10zMwsm5Ac+dOU6aCGHZVZzHd4wMrO1nw==
+  dependencies:
+    "@graphql-codegen/plugin-helpers" "^1.18.7"
+    "@graphql-codegen/visitor-plugin-common" "1.21.0"
+    auto-bind "~4.0.0"
+    change-case-all "1.0.14"
+    tslib "~2.2.0"
+
 "@graphql-codegen/typescript-resolvers@^1.19.2":
   version "1.19.2"
   resolved "https://registry.yarnpkg.com/@graphql-codegen/typescript-resolvers/-/typescript-resolvers-1.19.2.tgz#07d97961276ef32fcd7ce10e65c09a6d91198954"

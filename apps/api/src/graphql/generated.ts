@@ -1,5 +1,5 @@
 import { GraphQLResolveInfo } from 'graphql';
-export type Maybe<T> = T | null;
+export type Maybe<T> = T | undefined;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
 export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
@@ -15,9 +15,9 @@ export type Scalars = {
 
 export type Mutation = {
   __typename?: 'Mutation';
-  userCreate: UserResponse;
-  userUpdate: UserResponse;
-  userDestroy: UserResponse;
+  userCreate: UserCreateResponse;
+  userUpdate: UserUpdateResponse;
+  userDestroy: UserDestroyResponse;
 };
 
 
@@ -38,7 +38,7 @@ export type MutationUserDestroyArgs = {
 export type Query = {
   __typename?: 'Query';
   usersListAll: UsersListAllResponse;
-  usersFindOne: UserResponse;
+  usersFindOne: UsersFindOneResponse;
 };
 
 
@@ -46,12 +46,30 @@ export type QueryUsersFindOneArgs = {
   input: UsersFindOneInput;
 };
 
+export type User = {
+  __typename?: 'User';
+  id: Scalars['Int'];
+  email: Scalars['String'];
+  firstName: Scalars['String'];
+  lastName: Scalars['String'];
+};
+
 export type UserCreateInput = {
   user: UserInput;
 };
 
+export type UserCreateResponse = {
+  __typename?: 'UserCreateResponse';
+  user?: Maybe<User>;
+};
+
 export type UserDestroyInput = {
   userId: Scalars['Int'];
+};
+
+export type UserDestroyResponse = {
+  __typename?: 'UserDestroyResponse';
+  user?: Maybe<User>;
 };
 
 export type UserInput = {
@@ -61,30 +79,31 @@ export type UserInput = {
   lastName: Scalars['String'];
 };
 
-export type UserResponse = {
-  __typename?: 'UserResponse';
-  id: Scalars['Int'];
-  email: Scalars['String'];
-  firstName: Scalars['String'];
-  lastName: Scalars['String'];
-};
-
 export type UserUpdateInput = {
   user: UserInput;
 };
 
-export type UserUpdateResponse = UserResponse;
+export type UserUpdateResponse = {
+  __typename?: 'UserUpdateResponse';
+  user?: Maybe<User>;
+};
 
 export type UsersFindOneInput = {
   userId: Scalars['Int'];
 };
 
-export type UsersListAllResponse = {
-  __typename?: 'UsersListAllResponse';
-  users: Array<UserResponse>;
+export type UsersFindOneResponse = {
+  __typename?: 'UsersFindOneResponse';
+  user?: Maybe<User>;
 };
 
+export type UsersListAllResponse = {
+  __typename?: 'UsersListAllResponse';
+  users: Array<User>;
+};
 
+export type WithIndex<TObject> = TObject & Record<string, any>;
+export type ResolversObject<TObject> = WithIndex<TObject>;
 
 export type ResolverTypeWrapper<T> = Promise<T> | T;
 
@@ -161,74 +180,99 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 ) => TResult | Promise<TResult>;
 
 /** Mapping between all available schema types and the resolvers types */
-export type ResolversTypes = {
+export type ResolversTypes = ResolversObject<{
   Mutation: ResolverTypeWrapper<{}>;
   Query: ResolverTypeWrapper<{}>;
-  UserCreateInput: UserCreateInput;
-  UserDestroyInput: UserDestroyInput;
+  User: ResolverTypeWrapper<User>;
   Int: ResolverTypeWrapper<Scalars['Int']>;
-  UserInput: UserInput;
   String: ResolverTypeWrapper<Scalars['String']>;
-  UserResponse: ResolverTypeWrapper<UserResponse>;
+  UserCreateInput: UserCreateInput;
+  UserCreateResponse: ResolverTypeWrapper<UserCreateResponse>;
+  UserDestroyInput: UserDestroyInput;
+  UserDestroyResponse: ResolverTypeWrapper<UserDestroyResponse>;
+  UserInput: UserInput;
   UserUpdateInput: UserUpdateInput;
-  UserUpdateResponse: ResolversTypes['UserResponse'];
+  UserUpdateResponse: ResolverTypeWrapper<UserUpdateResponse>;
   UsersFindOneInput: UsersFindOneInput;
+  UsersFindOneResponse: ResolverTypeWrapper<UsersFindOneResponse>;
   UsersListAllResponse: ResolverTypeWrapper<UsersListAllResponse>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
-};
+}>;
 
 /** Mapping between all available schema types and the resolvers parents */
-export type ResolversParentTypes = {
+export type ResolversParentTypes = ResolversObject<{
   Mutation: {};
   Query: {};
-  UserCreateInput: UserCreateInput;
-  UserDestroyInput: UserDestroyInput;
+  User: User;
   Int: Scalars['Int'];
-  UserInput: UserInput;
   String: Scalars['String'];
-  UserResponse: UserResponse;
+  UserCreateInput: UserCreateInput;
+  UserCreateResponse: UserCreateResponse;
+  UserDestroyInput: UserDestroyInput;
+  UserDestroyResponse: UserDestroyResponse;
+  UserInput: UserInput;
   UserUpdateInput: UserUpdateInput;
-  UserUpdateResponse: ResolversParentTypes['UserResponse'];
+  UserUpdateResponse: UserUpdateResponse;
   UsersFindOneInput: UsersFindOneInput;
+  UsersFindOneResponse: UsersFindOneResponse;
   UsersListAllResponse: UsersListAllResponse;
   Boolean: Scalars['Boolean'];
-};
+}>;
 
-export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
-  userCreate?: Resolver<ResolversTypes['UserResponse'], ParentType, ContextType, RequireFields<MutationUserCreateArgs, 'input'>>;
-  userUpdate?: Resolver<ResolversTypes['UserResponse'], ParentType, ContextType, RequireFields<MutationUserUpdateArgs, 'input'>>;
-  userDestroy?: Resolver<ResolversTypes['UserResponse'], ParentType, ContextType, RequireFields<MutationUserDestroyArgs, 'input'>>;
-};
+export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = ResolversObject<{
+  userCreate?: Resolver<ResolversTypes['UserCreateResponse'], ParentType, ContextType, RequireFields<MutationUserCreateArgs, 'input'>>;
+  userUpdate?: Resolver<ResolversTypes['UserUpdateResponse'], ParentType, ContextType, RequireFields<MutationUserUpdateArgs, 'input'>>;
+  userDestroy?: Resolver<ResolversTypes['UserDestroyResponse'], ParentType, ContextType, RequireFields<MutationUserDestroyArgs, 'input'>>;
+}>;
 
-export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
+export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = ResolversObject<{
   usersListAll?: Resolver<ResolversTypes['UsersListAllResponse'], ParentType, ContextType>;
-  usersFindOne?: Resolver<ResolversTypes['UserResponse'], ParentType, ContextType, RequireFields<QueryUsersFindOneArgs, 'input'>>;
-};
+  usersFindOne?: Resolver<ResolversTypes['UsersFindOneResponse'], ParentType, ContextType, RequireFields<QueryUsersFindOneArgs, 'input'>>;
+}>;
 
-export type UserResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['UserResponse'] = ResolversParentTypes['UserResponse']> = {
+export type UserResolvers<ContextType = any, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = ResolversObject<{
   id?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   email?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   firstName?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   lastName?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
+}>;
 
-export type UserUpdateResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['UserUpdateResponse'] = ResolversParentTypes['UserUpdateResponse']> = {
-  __resolveType: TypeResolveFn<'UserResponse', ParentType, ContextType>;
-};
-
-export type UsersListAllResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['UsersListAllResponse'] = ResolversParentTypes['UsersListAllResponse']> = {
-  users?: Resolver<Array<ResolversTypes['UserResponse']>, ParentType, ContextType>;
+export type UserCreateResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['UserCreateResponse'] = ResolversParentTypes['UserCreateResponse']> = ResolversObject<{
+  user?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
+}>;
 
-export type Resolvers<ContextType = any> = {
+export type UserDestroyResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['UserDestroyResponse'] = ResolversParentTypes['UserDestroyResponse']> = ResolversObject<{
+  user?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type UserUpdateResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['UserUpdateResponse'] = ResolversParentTypes['UserUpdateResponse']> = ResolversObject<{
+  user?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type UsersFindOneResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['UsersFindOneResponse'] = ResolversParentTypes['UsersFindOneResponse']> = ResolversObject<{
+  user?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type UsersListAllResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['UsersListAllResponse'] = ResolversParentTypes['UsersListAllResponse']> = ResolversObject<{
+  users?: Resolver<Array<ResolversTypes['User']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type Resolvers<ContextType = any> = ResolversObject<{
   Mutation?: MutationResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
-  UserResponse?: UserResponseResolvers<ContextType>;
+  User?: UserResolvers<ContextType>;
+  UserCreateResponse?: UserCreateResponseResolvers<ContextType>;
+  UserDestroyResponse?: UserDestroyResponseResolvers<ContextType>;
   UserUpdateResponse?: UserUpdateResponseResolvers<ContextType>;
+  UsersFindOneResponse?: UsersFindOneResponseResolvers<ContextType>;
   UsersListAllResponse?: UsersListAllResponseResolvers<ContextType>;
-};
+}>;
 
 
 /**

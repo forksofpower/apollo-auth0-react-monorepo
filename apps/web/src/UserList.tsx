@@ -1,25 +1,21 @@
 import React from "react";
-
-type User = {
-  id: number;
-  email: string;
-  firstName: string;
-  lastName: string;
-};
+import { User } from "./graphql";
 
 interface Props {
   users: User[];
 }
 
 const UserList: React.FC<Props> = ({ users }: Props) => {
+  if (!users) return null;
   return (
     <>
-      {users.map((user: User) => (
-        <div key={user.id}>
-          {`${user.firstName} ${user.lastName}`}
-          <small>{user.email}</small>
-        </div>
-      ))}
+      {users &&
+        users.map((user: User) => (
+          <div key={user.id}>
+            {`${user.firstName} ${user.lastName}`}
+            <small>{user.email}</small>
+          </div>
+        ))}
     </>
   );
 };
