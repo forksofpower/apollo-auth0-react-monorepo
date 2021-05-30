@@ -49,11 +49,11 @@ export const userDestroy = async (
 export const usersListAll = async (
     _parent: unknown,
     _args: unknown,
-    context: AuthenticatedContext
+    _context: AuthenticatedContext
 ): Promise<UsersListAllResponse> => {
-    if (!context.account) {
-        throw new AuthenticationError('The request is not authenticated.');
-    }
+    // if (!context.account) {
+    //     throw new AuthenticationError('The request is not authenticated.');
+    // }
     const users = await Users.listAll();
 
     return { users };
