@@ -11,3 +11,14 @@ export const USERS_LIST_ALL = gql`
     }
     ${USER_FIELDS}
 `;
+
+export const USERS_FIND_ONE = gql`
+    query UsersFindOne($input: UsersFindOneInput!) {
+        usersFindOne(input: $input) {
+            user {
+                ...User
+            }
+        }
+    }
+    ${USER_FIELDS}
+`;
