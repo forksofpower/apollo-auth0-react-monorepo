@@ -5,6 +5,19 @@ generates:
     plugins:
       - "typescript"
       - "typescript-resolvers"
-  # ./graphql.schema.json:
-  #   plugins:
-  #     - "introspection"
+  "../web/src/graphql/generated.ts":
+    documents: './src/graphql/documents/**/*.gql.ts'
+    plugins:
+      - "typescript"
+      - "typescript-operations"
+      - "typescript-react-apollo"
+    config:
+      reactApolloVersion: 3
+      withHooks: true
+      skipTypename: true
+      withRefetchFn: true
+
+config:
+  useIndexSignature: true
+  avoidOptionals: false
+  maybeValue: T | undefined

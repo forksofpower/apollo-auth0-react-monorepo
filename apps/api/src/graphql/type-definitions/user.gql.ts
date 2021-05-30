@@ -1,14 +1,14 @@
 import gql from "graphql-tag";
 
 export default gql`
-    input UserInput {
-        id: Int
+    type User {
+        id: Int!
         email: String!
         firstName: String!
         lastName: String!
     }
-    type UserResponse {
-        id: Int!
+    input UserInput {
+        id: Int
         email: String!
         firstName: String!
         lastName: String!
@@ -17,33 +17,45 @@ export default gql`
     input UserCreateInput {
         user: UserInput!
     }
+    type UserCreateResponse {
+        user: User
+    }
     input UserUpdateInput {
         user: UserInput!
     }
+    type UserUpdateResponse {
+        user: User
+    }
     input UserDestroyInput {
         userId: Int!
+    }
+    type UserDestroyResponse {
+        user: User
     }
     input UsersFindOneInput {
         userId: Int!
     }
     type UsersListAllResponse {
-        users: [UserResponse!]!
+        users: [User!]!
+    }
+    type UsersFindOneResponse {
+        user: User
     }
     type Mutation {
         userCreate(
             input: UserCreateInput!
-        ): UserResponse!
+        ): UserCreateResponse!
         userUpdate(
             input: UserUpdateInput!
-        ): UserResponse!
+        ): UserUpdateResponse!
         userDestroy(
             input: UserDestroyInput!
-        ): UserResponse!
+        ): UserDestroyResponse!
     }
     type Query {
         usersListAll: UsersListAllResponse!
         usersFindOne(
             input: UsersFindOneInput!
-        ): UserResponse!
+        ): UsersFindOneResponse!
     }
 `;
