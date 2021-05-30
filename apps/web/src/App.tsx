@@ -4,8 +4,8 @@ import useUsers from "./hooks/useUsers";
 import UserList from "./UserList";
 
 const App: React.FC = () => {
-  const { userList, usersLoading } = useUsers();
-  return <div>{!usersLoading && <UserList users={userList} />}</div>;
+  const { users, usersLoading } = useUsers();
+  return <div>{!usersLoading && <UserList users={users} />}</div>;
 };
 
 export default App;

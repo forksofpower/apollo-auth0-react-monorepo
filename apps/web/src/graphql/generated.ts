@@ -19,7 +19,6 @@ export type Scalars = {
 };
 
 export type Mutation = {
-  __typename?: "Mutation";
   userCreate: UserCreateResponse;
   userUpdate: UserUpdateResponse;
   userDestroy: UserDestroyResponse;
@@ -38,7 +37,6 @@ export type MutationUserDestroyArgs = {
 };
 
 export type Query = {
-  __typename?: "Query";
   usersListAll: UsersListAllResponse;
   usersFindOne: UsersFindOneResponse;
 };
@@ -48,7 +46,6 @@ export type QueryUsersFindOneArgs = {
 };
 
 export type User = {
-  __typename?: "User";
   id: Scalars["Int"];
   email: Scalars["String"];
   firstName: Scalars["String"];
@@ -60,7 +57,6 @@ export type UserCreateInput = {
 };
 
 export type UserCreateResponse = {
-  __typename?: "UserCreateResponse";
   user?: Maybe<User>;
 };
 
@@ -69,7 +65,6 @@ export type UserDestroyInput = {
 };
 
 export type UserDestroyResponse = {
-  __typename?: "UserDestroyResponse";
   user?: Maybe<User>;
 };
 
@@ -85,7 +80,6 @@ export type UserUpdateInput = {
 };
 
 export type UserUpdateResponse = {
-  __typename?: "UserUpdateResponse";
   user?: Maybe<User>;
 };
 
@@ -94,16 +88,14 @@ export type UsersFindOneInput = {
 };
 
 export type UsersFindOneResponse = {
-  __typename?: "UsersFindOneResponse";
   user?: Maybe<User>;
 };
 
 export type UsersListAllResponse = {
-  __typename?: "UsersListAllResponse";
   users: Array<User>;
 };
 
-export type UserFragment = { __typename?: "User" } & Pick<
+export type UserFragment = Pick<
   User,
   "id" | "email" | "firstName" | "lastName"
 >;
@@ -112,48 +104,34 @@ export type UserCreateMutationVariables = Exact<{
   input: UserCreateInput;
 }>;
 
-export type UserCreateMutation = { __typename?: "Mutation" } & {
-  userCreate: { __typename?: "UserCreateResponse" } & {
-    user?: Maybe<{ __typename?: "User" } & UserFragment>;
-  };
-};
+export type UserCreateMutation = { userCreate: { user?: Maybe<UserFragment> } };
 
 export type UserUpdateMutationVariables = Exact<{
   input: UserUpdateInput;
 }>;
 
-export type UserUpdateMutation = { __typename?: "Mutation" } & {
-  userUpdate: { __typename?: "UserUpdateResponse" } & {
-    user?: Maybe<{ __typename?: "User" } & UserFragment>;
-  };
-};
+export type UserUpdateMutation = { userUpdate: { user?: Maybe<UserFragment> } };
 
 export type UserDestroyMutationVariables = Exact<{
   input: UserDestroyInput;
 }>;
 
-export type UserDestroyMutation = { __typename?: "Mutation" } & {
-  userDestroy: { __typename?: "UserDestroyResponse" } & {
-    user?: Maybe<{ __typename?: "User" } & UserFragment>;
-  };
+export type UserDestroyMutation = {
+  userDestroy: { user?: Maybe<UserFragment> };
 };
 
 export type UsersListAllQueryVariables = Exact<{ [key: string]: never }>;
 
-export type UsersListAllQuery = { __typename?: "Query" } & {
-  usersListAll: { __typename?: "UsersListAllResponse" } & {
-    users: Array<{ __typename?: "User" } & UserFragment>;
-  };
+export type UsersListAllQuery = {
+  usersListAll: { users: Array<UserFragment> };
 };
 
 export type UsersFindOneQueryVariables = Exact<{
   input: UsersFindOneInput;
 }>;
 
-export type UsersFindOneQuery = { __typename?: "Query" } & {
-  usersFindOne: { __typename?: "UsersFindOneResponse" } & {
-    user?: Maybe<{ __typename?: "User" } & UserFragment>;
-  };
+export type UsersFindOneQuery = {
+  usersFindOne: { user?: Maybe<UserFragment> };
 };
 
 export const UserFragmentDoc = gql`

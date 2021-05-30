@@ -14,12 +14,9 @@ generates:
     config:
       reactApolloVersion: 3
       withHooks: true
-      # skipTypename: true
+      skipTypename: true
       withRefetchFn: true
 
-  # ./graphql.schema.json:
-  #   plugins:
-  #     - "introspection"
 config:
   useIndexSignature: true
   avoidOptionals: false
