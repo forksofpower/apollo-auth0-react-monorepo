@@ -9,7 +9,6 @@ import jwt from "jsonwebtoken";
 import { auth, requiresAuth } from "express-openid-connect";
 import { Accounts } from './core';
 import { VerifyOptions } from 'jsonwebtoken';
-import { config } from 'process';
 
 const port = 3000;
 
