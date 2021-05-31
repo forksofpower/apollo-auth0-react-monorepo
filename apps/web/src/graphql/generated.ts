@@ -18,22 +18,48 @@ export type Scalars = {
   Float: number;
 };
 
+/** The account */
+export type Account = {
+  /** The account email */
+  email: Scalars["String"];
+};
+
+/** The accountFindOrCreate input */
+export type AccountFindOrCreateInput = {
+  /** The account email address */
+  email: Scalars["String"];
+  /** The account identity provider subject (must be unique) */
+  auth0UserId: Scalars["String"];
+};
+
+/** The accountFindOrCreate response */
+export type AccountFindOrCreateResponse = {
+  /** The new account */
+  account?: Maybe<Account>;
+};
+
 export type Mutation = {
+  /** Find or create an account */
+  accountFindOrCreate: AccountFindOrCreateResponse;
   userCreate: UserCreateResponse;
-  userUpdate: UserUpdateResponse;
   userDestroy: UserDestroyResponse;
+  userUpdate: UserUpdateResponse;
+};
+
+export type MutationAccountFindOrCreateArgs = {
+  input: AccountFindOrCreateInput;
 };
 
 export type MutationUserCreateArgs = {
   input: UserCreateInput;
 };
 
-export type MutationUserUpdateArgs = {
-  input: UserUpdateInput;
-};
-
 export type MutationUserDestroyArgs = {
   input: UserDestroyInput;
+};
+
+export type MutationUserUpdateArgs = {
+  input: UserUpdateInput;
 };
 
 export type Query = {

@@ -1,21 +1,20 @@
 import React from "react";
 import { User } from "./graphql";
+import useUsers from "./hooks/useUsers";
 
-interface Props {
-  users: User[];
-}
+const UserList: React.FC = () => {
+  const { users, usersLoading } = useUsers();
 
-const UserList: React.FC<Props> = ({ users }: Props) => {
-  if (!users) return null;
   return (
     <>
-      {users &&
-        users.map((user: User) => (
-          <div key={user.id}>
-            {`${user.firstName} ${user.lastName}`}
-            <small>{user.email}</small>
-          </div>
-        ))}
+      {!usersLoading
+        ? users.map((user: User) => (
+            <div key={user.id}>
+              {`${user.firstName} ${user.lastName}`}
+              <small>{user.email}</small>
+            </div>
+          ))
+        : "loading users..."}
     </>
   );
 };

@@ -1,12 +1,13 @@
 import express from 'express';
 import bodyParser from 'body-parser';
-import cors from 'cors';
+import cors, { CorsOptions } from 'cors';
 import { ApolloServer } from 'apollo-server-express';
 import { createConnection } from 'typeorm';
 import schema from "./graphql/schema";
 import logger from "morgan";
+import { JwtHeader, SigningKeyCallback } from 'jsonwebtoken';
 import jwt from "jsonwebtoken";
-import { auth, requiresAuth } from "express-openid-connect";
+import jwks from "jwks-rsa";
 import { Accounts } from './core';
 import { VerifyOptions } from 'jsonwebtoken';
 
@@ -18,11 +19,35 @@ type DecodedJWT = {
     sub: string;
     email: string;
 };
+/**
+ * The JWT/RSA code is hard
+ * Learn more below:
+ * https://auth0.com/blog/develop-modern-apps-with-react-graphql-apollo-and-add-authentication/
+ */
+ const client = jwks({
+  jwksUri: `https://pmjones88.us.auth0.com/.well-known/jwks.json`,
+});
 
+/**
+ * JWT options that should be verified
+ */
 const jwtOptions: VerifyOptions = {
-    audience: 'tXKb5prH3WZLs2QMab2z7996ylkSxNKa',
-    issuer: 'https://pmjones88.us.auth0.com',
-    algorithms: ['RS256']
+  audience: 'localhost:4000',
+  issuer: 'https://pmjones88.us.auth0.com/',
+  algorithms: ['RS256'],
+};
+
+/**
+ * Get Signing Key for JWT
+ */
+function getKey(header: JwtHeader, callback: SigningKeyCallback) {
+  client.getSigningKey(
+    header.kid || '',
+    function (err, key: jwks.SigningKey) {
+      const signingKey = key.getPublicKey();
+      callback(null, signingKey);
+    }
+  );
 }
 
 const server = new ApolloServer({
@@ -30,41 +55,36 @@ const server = new ApolloServer({
     playground: true,
     context: async ({ req }) => {
         try {
-            const token = req.headers.authorization;
+            const token = req.headers.authorization.split(' ')[1];
+            const createAccountRuleJWT = req.headers['auth0-rules-authorization'];
 
             // No token was found
             // Skip JWT verification
             if (!token) {
-                return {
-                    account: undefined
-                }
+              return {
+                account: undefined,
+                // Send the JWT from the configured auth0 rules if present
+                // Currently used for adding new users to the local DB.
+                createAccountRuleJWT: createAccountRuleJWT,
+              }
             }
 
-            const decodedJWT = jwt.decode(token) as DecodedJWT;
-            // = await new Promise<DecodedJWT>((resolve, reject) => {
-            //     const  = jwt.decode(token);
-            //     // jwt.verify(token,'f6YlN-sGU-KNHpipn6g1ryyKYJn1kQDcyUkrscUFUlPVTuwsbGei_kdLkBk_9Lr_', jwtOptions, (err, jwt) => {
-            //     //     if (err) reject(err);
+            const decodedJWT = await new Promise<DecodedJWT>((resolve, reject) => {
+                jwt.verify(token, getKey, jwtOptions, (err, decodedJWT) => {
+                  if (err) {
+                    return reject(err);
+                  }
+        
+                  resolve(decodedJWT as DecodedJWT);
+                });
+            });
+            
+            const account = await Accounts.accountFindByAuth0UserId(decodedJWT.sub);
 
-            //     //     resolve(jwt as DecodedJWT);
-            //     // });
-            // });
-            // const auth = req.oidc.user;
-
-            // if (!auth || !req.oidc.isAuthenticated()) {
-            //     console.log('NOT AUTHENTICATED!');
-            //     return {
-            //         account: undefined
-            //     }
-            // }
-            const { sub: auth0UserId, email} = decodedJWT;
-            const account = await Accounts.accountFindOrCreateByAuth0UserId(
-                auth0UserId, email
-            );
-
-            return { account: account }
+            return { account: account, createAccountRuleJWT: createAccountRuleJWT, }
         } catch(error) {
-            console.log(error);
+            console.error(error);
+            return { account: undefined }
         }
     }
 });
@@ -73,37 +93,16 @@ const server = new ApolloServer({
 app.use(bodyParser.json())
 // app.use(express.json());
 
-app.use("*", cors());
+const corsOptions: CorsOptions = {
+  origin: ['http://localhost:3000', 'http://localhost:3000'],
+  credentials: true,
+  methods: ["POST"]
+}
+app.use(cors(corsOptions));
+
+server.applyMiddleware({ app, cors: corsOptions });
 
 app.use(logger('dev'));
-
-app.use(auth({
-    authRequired: false,
-    auth0Logout: true,
-    baseURL: 'http://localhost:3000',
-    clientID: '5CXqpZf4UPKTDpcZBobR3NFBFvwp5mQB',
-    issuerBaseURL: 'https://pmjones88.us.auth0.com',
-    secret: 'f6YlN-sGU-KNHpipn6g1ryyKYJn1kQDcyUkrscUFUlPVTuwsbGei_kdLkBk_9Lr_'
-}));
-
-app.get('/', requiresAuth(), async (req, res) => {
-    // console.log(req.oidc.isAuthenticated());
-    // res.send(req.oidc.user);
-    const auth = req.oidc.user;
-
-
-    if (!auth || !req.oidc.isAuthenticated()) {
-        res.sendStatus(400)
-    }
-    const { sub: auth0UserId, email} = req.oidc.user;
-    const account = await Accounts.accountFindOrCreateByAuth0UserId(
-        auth0UserId, email
-    );
-
-    res.send(account);
-});
-
-server.applyMiddleware({ app, cors: true });
 
 /* Server */
 async function start() {

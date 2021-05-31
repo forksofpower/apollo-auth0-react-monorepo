@@ -13,11 +13,40 @@ export type Scalars = {
   Float: number;
 };
 
+/** The account */
+export type Account = {
+  __typename?: 'Account';
+  /** The account email */
+  email: Scalars['String'];
+};
+
+/** The accountFindOrCreate input */
+export type AccountFindOrCreateInput = {
+  /** The account email address */
+  email: Scalars['String'];
+  /** The account identity provider subject (must be unique) */
+  auth0UserId: Scalars['String'];
+};
+
+/** The accountFindOrCreate response */
+export type AccountFindOrCreateResponse = {
+  __typename?: 'AccountFindOrCreateResponse';
+  /** The new account */
+  account?: Maybe<Account>;
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
+  /** Find or create an account */
+  accountFindOrCreate: AccountFindOrCreateResponse;
   userCreate: UserCreateResponse;
-  userUpdate: UserUpdateResponse;
   userDestroy: UserDestroyResponse;
+  userUpdate: UserUpdateResponse;
+};
+
+
+export type MutationAccountFindOrCreateArgs = {
+  input: AccountFindOrCreateInput;
 };
 
 
@@ -26,13 +55,13 @@ export type MutationUserCreateArgs = {
 };
 
 
-export type MutationUserUpdateArgs = {
-  input: UserUpdateInput;
+export type MutationUserDestroyArgs = {
+  input: UserDestroyInput;
 };
 
 
-export type MutationUserDestroyArgs = {
-  input: UserDestroyInput;
+export type MutationUserUpdateArgs = {
+  input: UserUpdateInput;
 };
 
 export type Query = {
@@ -181,11 +210,14 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = ResolversObject<{
+  Account: ResolverTypeWrapper<Account>;
+  String: ResolverTypeWrapper<Scalars['String']>;
+  AccountFindOrCreateInput: AccountFindOrCreateInput;
+  AccountFindOrCreateResponse: ResolverTypeWrapper<AccountFindOrCreateResponse>;
   Mutation: ResolverTypeWrapper<{}>;
   Query: ResolverTypeWrapper<{}>;
   User: ResolverTypeWrapper<User>;
   Int: ResolverTypeWrapper<Scalars['Int']>;
-  String: ResolverTypeWrapper<Scalars['String']>;
   UserCreateInput: UserCreateInput;
   UserCreateResponse: ResolverTypeWrapper<UserCreateResponse>;
   UserDestroyInput: UserDestroyInput;
@@ -201,11 +233,14 @@ export type ResolversTypes = ResolversObject<{
 
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = ResolversObject<{
+  Account: Account;
+  String: Scalars['String'];
+  AccountFindOrCreateInput: AccountFindOrCreateInput;
+  AccountFindOrCreateResponse: AccountFindOrCreateResponse;
   Mutation: {};
   Query: {};
   User: User;
   Int: Scalars['Int'];
-  String: Scalars['String'];
   UserCreateInput: UserCreateInput;
   UserCreateResponse: UserCreateResponse;
   UserDestroyInput: UserDestroyInput;
@@ -219,10 +254,21 @@ export type ResolversParentTypes = ResolversObject<{
   Boolean: Scalars['Boolean'];
 }>;
 
+export type AccountResolvers<ContextType = any, ParentType extends ResolversParentTypes['Account'] = ResolversParentTypes['Account']> = ResolversObject<{
+  email?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type AccountFindOrCreateResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['AccountFindOrCreateResponse'] = ResolversParentTypes['AccountFindOrCreateResponse']> = ResolversObject<{
+  account?: Resolver<Maybe<ResolversTypes['Account']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = ResolversObject<{
+  accountFindOrCreate?: Resolver<ResolversTypes['AccountFindOrCreateResponse'], ParentType, ContextType, RequireFields<MutationAccountFindOrCreateArgs, 'input'>>;
   userCreate?: Resolver<ResolversTypes['UserCreateResponse'], ParentType, ContextType, RequireFields<MutationUserCreateArgs, 'input'>>;
-  userUpdate?: Resolver<ResolversTypes['UserUpdateResponse'], ParentType, ContextType, RequireFields<MutationUserUpdateArgs, 'input'>>;
   userDestroy?: Resolver<ResolversTypes['UserDestroyResponse'], ParentType, ContextType, RequireFields<MutationUserDestroyArgs, 'input'>>;
+  userUpdate?: Resolver<ResolversTypes['UserUpdateResponse'], ParentType, ContextType, RequireFields<MutationUserUpdateArgs, 'input'>>;
 }>;
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = ResolversObject<{
@@ -264,6 +310,8 @@ export type UsersListAllResponseResolvers<ContextType = any, ParentType extends 
 }>;
 
 export type Resolvers<ContextType = any> = ResolversObject<{
+  Account?: AccountResolvers<ContextType>;
+  AccountFindOrCreateResponse?: AccountFindOrCreateResponseResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
   User?: UserResolvers<ContextType>;

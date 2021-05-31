@@ -1,6 +1,6 @@
 import gql from "graphql-tag";
 
-export default gql`
+export const users = gql`
     type User {
         id: Int!
         email: String!

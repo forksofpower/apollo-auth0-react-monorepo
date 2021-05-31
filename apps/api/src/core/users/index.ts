@@ -26,8 +26,7 @@ export const listAll = async (): Promise<User[]> => {
  */
 export const findById = async (id: number): Promise<User> => {
     const repo = userRepo();
-
-    console.log(`ID: ${id}`);
+    
     return await repo.findOne(id);
 }
 
