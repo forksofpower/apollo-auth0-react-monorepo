@@ -55,7 +55,7 @@ const server = new ApolloServer({
     playground: true,
     context: async ({ req }) => {
         try {
-            const token = req.headers.authorization.split(' ')[1];
+            const token = req.headers.authorization?.split(' ')[1];
             const createAccountRuleJWT = req.headers['auth0-rules-authorization'];
 
             // No token was found
