@@ -1,7 +1,7 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 import cors, { CorsOptions } from 'cors';
-import { ApolloServer } from 'apollo-server-express';
+import { ApolloServer, PubSub } from 'apollo-server-express';
 import { createConnection } from 'typeorm';
 import schema from "./graphql/schema";
 import logger from "morgan";
@@ -50,6 +50,8 @@ function getKey(header: JwtHeader, callback: SigningKeyCallback) {
   );
 }
 
+const pubsub = new PubSub();
+
 const server = new ApolloServer({
     schema,
     playground: true,
@@ -66,6 +68,7 @@ const server = new ApolloServer({
                 // Send the JWT from the configured auth0 rules if present
                 // Currently used for adding new users to the local DB.
                 createAccountRuleJWT: createAccountRuleJWT,
+                pubsub
               }
             }
 
@@ -81,10 +84,10 @@ const server = new ApolloServer({
             
             const account = await Accounts.accountFindByAuth0UserId(decodedJWT.sub);
 
-            return { account: account, createAccountRuleJWT: createAccountRuleJWT, }
+            return { account: account, createAccountRuleJWT: createAccountRuleJWT, pubsub }
         } catch(error) {
             console.error(error);
-            return { account: undefined }
+            return { account: undefined, pubsub }
         }
     }
 });
