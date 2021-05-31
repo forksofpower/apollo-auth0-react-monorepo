@@ -10,14 +10,17 @@ const AuthProvider: React.FC<Props> = ({ children }: Props) => {
   const history = useHistory();
 
   const onRedirectCallback = (appState: AppState) => {
-    history.push(appState.returnTo || window.location.pathname);
+    history.push(appState?.returnTo || window.location.pathname);
   };
+
   return (
     <Auth0Provider
-      domain="https://pmjones88.us.auth0.com"
-      clientId="5CXqpZf4UPKTDpcZBobR3NFBFvwp5mQB"
+      domain="pmjones88.us.auth0.com"
+      clientId="9TclQYulvo4q1gSgfOJTbfVGzXIN1mVw"
       redirectUri={window.location.origin}
       onRedirectCallback={onRedirectCallback}
+      useRefreshTokens={true}
+      scope="read:all"
     >
       {children}
     </Auth0Provider>
