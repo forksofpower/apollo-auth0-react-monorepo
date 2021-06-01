@@ -6,7 +6,7 @@
   "main": "dist/server.js",
   "scripts": {
     "start": "tsc && node dist/server.js",
-    "db:migrate": "ts-node ./node_modules/.bin/typeorm migration:run",
+    "db:migrate": "ls && ts-node ./node_modules/.bin/typeorm migration:run",
     "gen:migration": "ts-node ./node_modules/.bin/typeorm migration:generate",
     "gen:schema": "graphql-codegen --config codegen.yml"
   },

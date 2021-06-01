@@ -1,12 +1,8 @@
 import { AuthenticationError } from "apollo-server-errors";
 import jwt from "jsonwebtoken";
 import { Accounts, Account } from "../../core";
+import { AuthenticatedContext } from "../../types/resolver-context";
 import { AccountFindOrCreateResponse, MutationAccountFindOrCreateArgs } from "../generated";
-
-export type AuthenticatedContext = {
-  account?: Account;
-  createAccountRuleJWT?: string;
-};
 
 export const create = async (
     _parent: unknown,

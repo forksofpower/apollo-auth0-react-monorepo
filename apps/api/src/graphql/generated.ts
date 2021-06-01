@@ -35,10 +35,28 @@ export type AccountFindOrCreateResponse = {
   account?: Maybe<Account>;
 };
 
+export type Chat = {
+  __typename?: 'Chat';
+  id: Scalars['Int'];
+  from: Scalars['String'];
+  message: Scalars['String'];
+};
+
+export type ChatResponse = {
+  __typename?: 'ChatResponse';
+  message: Chat;
+};
+
+export type ChatsListAllResponse = {
+  __typename?: 'ChatsListAllResponse';
+  messages: Array<Chat>;
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
   /** Find or create an account */
   accountFindOrCreate: AccountFindOrCreateResponse;
+  sendMessage?: Maybe<ChatResponse>;
   userCreate: UserCreateResponse;
   userDestroy: UserDestroyResponse;
   userUpdate: UserUpdateResponse;
@@ -47,6 +65,12 @@ export type Mutation = {
 
 export type MutationAccountFindOrCreateArgs = {
   input: AccountFindOrCreateInput;
+};
+
+
+export type MutationSendMessageArgs = {
+  from: Scalars['String'];
+  message: Scalars['String'];
 };
 
 
@@ -66,13 +90,19 @@ export type MutationUserUpdateArgs = {
 
 export type Query = {
   __typename?: 'Query';
-  usersListAll: UsersListAllResponse;
+  chatsListAll?: Maybe<ChatsListAllResponse>;
   usersFindOne: UsersFindOneResponse;
+  usersListAll: UsersListAllResponse;
 };
 
 
 export type QueryUsersFindOneArgs = {
   input: UsersFindOneInput;
+};
+
+export type Subscription = {
+  __typename?: 'Subscription';
+  messageSent?: Maybe<ChatResponse>;
 };
 
 export type User = {
@@ -214,10 +244,14 @@ export type ResolversTypes = ResolversObject<{
   String: ResolverTypeWrapper<Scalars['String']>;
   AccountFindOrCreateInput: AccountFindOrCreateInput;
   AccountFindOrCreateResponse: ResolverTypeWrapper<AccountFindOrCreateResponse>;
+  Chat: ResolverTypeWrapper<Chat>;
+  Int: ResolverTypeWrapper<Scalars['Int']>;
+  ChatResponse: ResolverTypeWrapper<ChatResponse>;
+  ChatsListAllResponse: ResolverTypeWrapper<ChatsListAllResponse>;
   Mutation: ResolverTypeWrapper<{}>;
   Query: ResolverTypeWrapper<{}>;
+  Subscription: ResolverTypeWrapper<{}>;
   User: ResolverTypeWrapper<User>;
-  Int: ResolverTypeWrapper<Scalars['Int']>;
   UserCreateInput: UserCreateInput;
   UserCreateResponse: ResolverTypeWrapper<UserCreateResponse>;
   UserDestroyInput: UserDestroyInput;
@@ -237,10 +271,14 @@ export type ResolversParentTypes = ResolversObject<{
   String: Scalars['String'];
   AccountFindOrCreateInput: AccountFindOrCreateInput;
   AccountFindOrCreateResponse: AccountFindOrCreateResponse;
+  Chat: Chat;
+  Int: Scalars['Int'];
+  ChatResponse: ChatResponse;
+  ChatsListAllResponse: ChatsListAllResponse;
   Mutation: {};
   Query: {};
+  Subscription: {};
   User: User;
-  Int: Scalars['Int'];
   UserCreateInput: UserCreateInput;
   UserCreateResponse: UserCreateResponse;
   UserDestroyInput: UserDestroyInput;
@@ -264,16 +302,39 @@ export type AccountFindOrCreateResponseResolvers<ContextType = any, ParentType e
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
+export type ChatResolvers<ContextType = any, ParentType extends ResolversParentTypes['Chat'] = ResolversParentTypes['Chat']> = ResolversObject<{
+  id?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  from?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  message?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type ChatResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['ChatResponse'] = ResolversParentTypes['ChatResponse']> = ResolversObject<{
+  message?: Resolver<ResolversTypes['Chat'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type ChatsListAllResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['ChatsListAllResponse'] = ResolversParentTypes['ChatsListAllResponse']> = ResolversObject<{
+  messages?: Resolver<Array<ResolversTypes['Chat']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = ResolversObject<{
   accountFindOrCreate?: Resolver<ResolversTypes['AccountFindOrCreateResponse'], ParentType, ContextType, RequireFields<MutationAccountFindOrCreateArgs, 'input'>>;
+  sendMessage?: Resolver<Maybe<ResolversTypes['ChatResponse']>, ParentType, ContextType, RequireFields<MutationSendMessageArgs, 'from' | 'message'>>;
   userCreate?: Resolver<ResolversTypes['UserCreateResponse'], ParentType, ContextType, RequireFields<MutationUserCreateArgs, 'input'>>;
   userDestroy?: Resolver<ResolversTypes['UserDestroyResponse'], ParentType, ContextType, RequireFields<MutationUserDestroyArgs, 'input'>>;
   userUpdate?: Resolver<ResolversTypes['UserUpdateResponse'], ParentType, ContextType, RequireFields<MutationUserUpdateArgs, 'input'>>;
 }>;
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = ResolversObject<{
-  usersListAll?: Resolver<ResolversTypes['UsersListAllResponse'], ParentType, ContextType>;
+  chatsListAll?: Resolver<Maybe<ResolversTypes['ChatsListAllResponse']>, ParentType, ContextType>;
   usersFindOne?: Resolver<ResolversTypes['UsersFindOneResponse'], ParentType, ContextType, RequireFields<QueryUsersFindOneArgs, 'input'>>;
+  usersListAll?: Resolver<ResolversTypes['UsersListAllResponse'], ParentType, ContextType>;
+}>;
+
+export type SubscriptionResolvers<ContextType = any, ParentType extends ResolversParentTypes['Subscription'] = ResolversParentTypes['Subscription']> = ResolversObject<{
+  messageSent?: SubscriptionResolver<Maybe<ResolversTypes['ChatResponse']>, "messageSent", ParentType, ContextType>;
 }>;
 
 export type UserResolvers<ContextType = any, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = ResolversObject<{
@@ -312,8 +373,12 @@ export type UsersListAllResponseResolvers<ContextType = any, ParentType extends 
 export type Resolvers<ContextType = any> = ResolversObject<{
   Account?: AccountResolvers<ContextType>;
   AccountFindOrCreateResponse?: AccountFindOrCreateResponseResolvers<ContextType>;
+  Chat?: ChatResolvers<ContextType>;
+  ChatResponse?: ChatResponseResolvers<ContextType>;
+  ChatsListAllResponse?: ChatsListAllResponseResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
+  Subscription?: SubscriptionResolvers<ContextType>;
   User?: UserResolvers<ContextType>;
   UserCreateResponse?: UserCreateResponseResolvers<ContextType>;
   UserDestroyResponse?: UserDestroyResponseResolvers<ContextType>;

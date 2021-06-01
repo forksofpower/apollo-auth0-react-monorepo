@@ -1,14 +1,10 @@
-import { gql } from "@apollo/client";
-import * as Apollo from "@apollo/client";
+import { gql } from '@apollo/client';
+import * as Apollo from '@apollo/client';
 export type Maybe<T> = T | undefined;
-export type Exact<T extends { [key: string]: unknown }> = {
-  [K in keyof T]: T[K];
-};
-export type MakeOptional<T, K extends keyof T> = Omit<T, K> &
-  { [SubKey in K]?: Maybe<T[SubKey]> };
-export type MakeMaybe<T, K extends keyof T> = Omit<T, K> &
-  { [SubKey in K]: Maybe<T[SubKey]> };
-const defaultOptions = {};
+export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
+export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
+export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
+const defaultOptions =  {}
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: string;
@@ -21,15 +17,15 @@ export type Scalars = {
 /** The account */
 export type Account = {
   /** The account email */
-  email: Scalars["String"];
+  email: Scalars['String'];
 };
 
 /** The accountFindOrCreate input */
 export type AccountFindOrCreateInput = {
   /** The account email address */
-  email: Scalars["String"];
+  email: Scalars['String'];
   /** The account identity provider subject (must be unique) */
-  auth0UserId: Scalars["String"];
+  auth0UserId: Scalars['String'];
 };
 
 /** The accountFindOrCreate response */
@@ -38,44 +34,75 @@ export type AccountFindOrCreateResponse = {
   account?: Maybe<Account>;
 };
 
+export type Chat = {
+  id: Scalars['Int'];
+  from: Scalars['String'];
+  message: Scalars['String'];
+};
+
+export type ChatResponse = {
+  message: Chat;
+};
+
+export type ChatsListAllResponse = {
+  messages: Array<Chat>;
+};
+
 export type Mutation = {
   /** Find or create an account */
   accountFindOrCreate: AccountFindOrCreateResponse;
+  sendMessage?: Maybe<ChatResponse>;
   userCreate: UserCreateResponse;
   userDestroy: UserDestroyResponse;
   userUpdate: UserUpdateResponse;
 };
 
+
 export type MutationAccountFindOrCreateArgs = {
   input: AccountFindOrCreateInput;
 };
+
+
+export type MutationSendMessageArgs = {
+  from: Scalars['String'];
+  message: Scalars['String'];
+};
+
 
 export type MutationUserCreateArgs = {
   input: UserCreateInput;
 };
 
+
 export type MutationUserDestroyArgs = {
   input: UserDestroyInput;
 };
+
 
 export type MutationUserUpdateArgs = {
   input: UserUpdateInput;
 };
 
 export type Query = {
-  usersListAll: UsersListAllResponse;
+  chatsListAll?: Maybe<ChatsListAllResponse>;
   usersFindOne: UsersFindOneResponse;
+  usersListAll: UsersListAllResponse;
 };
+
 
 export type QueryUsersFindOneArgs = {
   input: UsersFindOneInput;
 };
 
+export type Subscription = {
+  messageSent?: Maybe<ChatResponse>;
+};
+
 export type User = {
-  id: Scalars["Int"];
-  email: Scalars["String"];
-  firstName: Scalars["String"];
-  lastName: Scalars["String"];
+  id: Scalars['Int'];
+  email: Scalars['String'];
+  firstName: Scalars['String'];
+  lastName: Scalars['String'];
 };
 
 export type UserCreateInput = {
@@ -87,7 +114,7 @@ export type UserCreateResponse = {
 };
 
 export type UserDestroyInput = {
-  userId: Scalars["Int"];
+  userId: Scalars['Int'];
 };
 
 export type UserDestroyResponse = {
@@ -95,10 +122,10 @@ export type UserDestroyResponse = {
 };
 
 export type UserInput = {
-  id?: Maybe<Scalars["Int"]>;
-  email: Scalars["String"];
-  firstName: Scalars["String"];
-  lastName: Scalars["String"];
+  id?: Maybe<Scalars['Int']>;
+  email: Scalars['String'];
+  firstName: Scalars['String'];
+  lastName: Scalars['String'];
 };
 
 export type UserUpdateInput = {
@@ -110,7 +137,7 @@ export type UserUpdateResponse = {
 };
 
 export type UsersFindOneInput = {
-  userId: Scalars["Int"];
+  userId: Scalars['Int'];
 };
 
 export type UsersFindOneResponse = {
@@ -121,14 +148,12 @@ export type UsersListAllResponse = {
   users: Array<User>;
 };
 
-export type UserFragment = Pick<
-  User,
-  "id" | "email" | "firstName" | "lastName"
->;
+export type UserFragment = Pick<User, 'id' | 'email' | 'firstName' | 'lastName'>;
 
 export type UserCreateMutationVariables = Exact<{
   input: UserCreateInput;
 }>;
+
 
 export type UserCreateMutation = { userCreate: { user?: Maybe<UserFragment> } };
 
@@ -136,52 +161,46 @@ export type UserUpdateMutationVariables = Exact<{
   input: UserUpdateInput;
 }>;
 
+
 export type UserUpdateMutation = { userUpdate: { user?: Maybe<UserFragment> } };
 
 export type UserDestroyMutationVariables = Exact<{
   input: UserDestroyInput;
 }>;
 
-export type UserDestroyMutation = {
-  userDestroy: { user?: Maybe<UserFragment> };
-};
 
-export type UsersListAllQueryVariables = Exact<{ [key: string]: never }>;
+export type UserDestroyMutation = { userDestroy: { user?: Maybe<UserFragment> } };
 
-export type UsersListAllQuery = {
-  usersListAll: { users: Array<UserFragment> };
-};
+export type UsersListAllQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type UsersListAllQuery = { usersListAll: { users: Array<UserFragment> } };
 
 export type UsersFindOneQueryVariables = Exact<{
   input: UsersFindOneInput;
 }>;
 
-export type UsersFindOneQuery = {
-  usersFindOne: { user?: Maybe<UserFragment> };
-};
+
+export type UsersFindOneQuery = { usersFindOne: { user?: Maybe<UserFragment> } };
 
 export const UserFragmentDoc = gql`
-  fragment User on User {
-    id
-    email
-    firstName
-    lastName
-  }
-`;
+    fragment User on User {
+  id
+  email
+  firstName
+  lastName
+}
+    `;
 export const UserCreateDocument = gql`
-  mutation UserCreate($input: UserCreateInput!) {
-    userCreate(input: $input) {
-      user {
-        ...User
-      }
+    mutation UserCreate($input: UserCreateInput!) {
+  userCreate(input: $input) {
+    user {
+      ...User
     }
   }
-  ${UserFragmentDoc}
-`;
-export type UserCreateMutationFn = Apollo.MutationFunction<
-  UserCreateMutation,
-  UserCreateMutationVariables
->;
+}
+    ${UserFragmentDoc}`;
+export type UserCreateMutationFn = Apollo.MutationFunction<UserCreateMutation, UserCreateMutationVariables>;
 
 /**
  * __useUserCreateMutation__
@@ -200,41 +219,23 @@ export type UserCreateMutationFn = Apollo.MutationFunction<
  *   },
  * });
  */
-export function useUserCreateMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    UserCreateMutation,
-    UserCreateMutationVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<UserCreateMutation, UserCreateMutationVariables>(
-    UserCreateDocument,
-    options
-  );
-}
-export type UserCreateMutationHookResult = ReturnType<
-  typeof useUserCreateMutation
->;
-export type UserCreateMutationResult =
-  Apollo.MutationResult<UserCreateMutation>;
-export type UserCreateMutationOptions = Apollo.BaseMutationOptions<
-  UserCreateMutation,
-  UserCreateMutationVariables
->;
-export const UserUpdateDocument = gql`
-  mutation UserUpdate($input: UserUpdateInput!) {
-    userUpdate(input: $input) {
-      user {
-        ...User
+export function useUserCreateMutation(baseOptions?: Apollo.MutationHookOptions<UserCreateMutation, UserCreateMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UserCreateMutation, UserCreateMutationVariables>(UserCreateDocument, options);
       }
+export type UserCreateMutationHookResult = ReturnType<typeof useUserCreateMutation>;
+export type UserCreateMutationResult = Apollo.MutationResult<UserCreateMutation>;
+export type UserCreateMutationOptions = Apollo.BaseMutationOptions<UserCreateMutation, UserCreateMutationVariables>;
+export const UserUpdateDocument = gql`
+    mutation UserUpdate($input: UserUpdateInput!) {
+  userUpdate(input: $input) {
+    user {
+      ...User
     }
   }
-  ${UserFragmentDoc}
-`;
-export type UserUpdateMutationFn = Apollo.MutationFunction<
-  UserUpdateMutation,
-  UserUpdateMutationVariables
->;
+}
+    ${UserFragmentDoc}`;
+export type UserUpdateMutationFn = Apollo.MutationFunction<UserUpdateMutation, UserUpdateMutationVariables>;
 
 /**
  * __useUserUpdateMutation__
@@ -253,41 +254,23 @@ export type UserUpdateMutationFn = Apollo.MutationFunction<
  *   },
  * });
  */
-export function useUserUpdateMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    UserUpdateMutation,
-    UserUpdateMutationVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<UserUpdateMutation, UserUpdateMutationVariables>(
-    UserUpdateDocument,
-    options
-  );
-}
-export type UserUpdateMutationHookResult = ReturnType<
-  typeof useUserUpdateMutation
->;
-export type UserUpdateMutationResult =
-  Apollo.MutationResult<UserUpdateMutation>;
-export type UserUpdateMutationOptions = Apollo.BaseMutationOptions<
-  UserUpdateMutation,
-  UserUpdateMutationVariables
->;
-export const UserDestroyDocument = gql`
-  mutation UserDestroy($input: UserDestroyInput!) {
-    userDestroy(input: $input) {
-      user {
-        ...User
+export function useUserUpdateMutation(baseOptions?: Apollo.MutationHookOptions<UserUpdateMutation, UserUpdateMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UserUpdateMutation, UserUpdateMutationVariables>(UserUpdateDocument, options);
       }
+export type UserUpdateMutationHookResult = ReturnType<typeof useUserUpdateMutation>;
+export type UserUpdateMutationResult = Apollo.MutationResult<UserUpdateMutation>;
+export type UserUpdateMutationOptions = Apollo.BaseMutationOptions<UserUpdateMutation, UserUpdateMutationVariables>;
+export const UserDestroyDocument = gql`
+    mutation UserDestroy($input: UserDestroyInput!) {
+  userDestroy(input: $input) {
+    user {
+      ...User
     }
   }
-  ${UserFragmentDoc}
-`;
-export type UserDestroyMutationFn = Apollo.MutationFunction<
-  UserDestroyMutation,
-  UserDestroyMutationVariables
->;
+}
+    ${UserFragmentDoc}`;
+export type UserDestroyMutationFn = Apollo.MutationFunction<UserDestroyMutation, UserDestroyMutationVariables>;
 
 /**
  * __useUserDestroyMutation__
@@ -306,37 +289,22 @@ export type UserDestroyMutationFn = Apollo.MutationFunction<
  *   },
  * });
  */
-export function useUserDestroyMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    UserDestroyMutation,
-    UserDestroyMutationVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<UserDestroyMutation, UserDestroyMutationVariables>(
-    UserDestroyDocument,
-    options
-  );
-}
-export type UserDestroyMutationHookResult = ReturnType<
-  typeof useUserDestroyMutation
->;
-export type UserDestroyMutationResult =
-  Apollo.MutationResult<UserDestroyMutation>;
-export type UserDestroyMutationOptions = Apollo.BaseMutationOptions<
-  UserDestroyMutation,
-  UserDestroyMutationVariables
->;
-export const UsersListAllDocument = gql`
-  query UsersListAll {
-    usersListAll {
-      users {
-        ...User
+export function useUserDestroyMutation(baseOptions?: Apollo.MutationHookOptions<UserDestroyMutation, UserDestroyMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UserDestroyMutation, UserDestroyMutationVariables>(UserDestroyDocument, options);
       }
+export type UserDestroyMutationHookResult = ReturnType<typeof useUserDestroyMutation>;
+export type UserDestroyMutationResult = Apollo.MutationResult<UserDestroyMutation>;
+export type UserDestroyMutationOptions = Apollo.BaseMutationOptions<UserDestroyMutation, UserDestroyMutationVariables>;
+export const UsersListAllDocument = gql`
+    query UsersListAll {
+  usersListAll {
+    users {
+      ...User
     }
   }
-  ${UserFragmentDoc}
-`;
+}
+    ${UserFragmentDoc}`;
 
 /**
  * __useUsersListAllQuery__
@@ -353,55 +321,29 @@ export const UsersListAllDocument = gql`
  *   },
  * });
  */
-export function useUsersListAllQuery(
-  baseOptions?: Apollo.QueryHookOptions<
-    UsersListAllQuery,
-    UsersListAllQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<UsersListAllQuery, UsersListAllQueryVariables>(
-    UsersListAllDocument,
-    options
-  );
-}
-export function useUsersListAllLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    UsersListAllQuery,
-    UsersListAllQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<UsersListAllQuery, UsersListAllQueryVariables>(
-    UsersListAllDocument,
-    options
-  );
-}
-export type UsersListAllQueryHookResult = ReturnType<
-  typeof useUsersListAllQuery
->;
-export type UsersListAllLazyQueryHookResult = ReturnType<
-  typeof useUsersListAllLazyQuery
->;
-export type UsersListAllQueryResult = Apollo.QueryResult<
-  UsersListAllQuery,
-  UsersListAllQueryVariables
->;
-export function refetchUsersListAllQuery(
-  variables?: UsersListAllQueryVariables
-) {
-  return { query: UsersListAllDocument, variables: variables };
-}
-export const UsersFindOneDocument = gql`
-  query UsersFindOne($input: UsersFindOneInput!) {
-    usersFindOne(input: $input) {
-      user {
-        ...User
+export function useUsersListAllQuery(baseOptions?: Apollo.QueryHookOptions<UsersListAllQuery, UsersListAllQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<UsersListAllQuery, UsersListAllQueryVariables>(UsersListAllDocument, options);
       }
+export function useUsersListAllLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<UsersListAllQuery, UsersListAllQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<UsersListAllQuery, UsersListAllQueryVariables>(UsersListAllDocument, options);
+        }
+export type UsersListAllQueryHookResult = ReturnType<typeof useUsersListAllQuery>;
+export type UsersListAllLazyQueryHookResult = ReturnType<typeof useUsersListAllLazyQuery>;
+export type UsersListAllQueryResult = Apollo.QueryResult<UsersListAllQuery, UsersListAllQueryVariables>;
+export function refetchUsersListAllQuery(variables?: UsersListAllQueryVariables) {
+      return { query: UsersListAllDocument, variables: variables }
+    }
+export const UsersFindOneDocument = gql`
+    query UsersFindOne($input: UsersFindOneInput!) {
+  usersFindOne(input: $input) {
+    user {
+      ...User
     }
   }
-  ${UserFragmentDoc}
-`;
+}
+    ${UserFragmentDoc}`;
 
 /**
  * __useUsersFindOneQuery__
@@ -419,42 +361,17 @@ export const UsersFindOneDocument = gql`
  *   },
  * });
  */
-export function useUsersFindOneQuery(
-  baseOptions: Apollo.QueryHookOptions<
-    UsersFindOneQuery,
-    UsersFindOneQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<UsersFindOneQuery, UsersFindOneQueryVariables>(
-    UsersFindOneDocument,
-    options
-  );
-}
-export function useUsersFindOneLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    UsersFindOneQuery,
-    UsersFindOneQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<UsersFindOneQuery, UsersFindOneQueryVariables>(
-    UsersFindOneDocument,
-    options
-  );
-}
-export type UsersFindOneQueryHookResult = ReturnType<
-  typeof useUsersFindOneQuery
->;
-export type UsersFindOneLazyQueryHookResult = ReturnType<
-  typeof useUsersFindOneLazyQuery
->;
-export type UsersFindOneQueryResult = Apollo.QueryResult<
-  UsersFindOneQuery,
-  UsersFindOneQueryVariables
->;
-export function refetchUsersFindOneQuery(
-  variables?: UsersFindOneQueryVariables
-) {
-  return { query: UsersFindOneDocument, variables: variables };
-}
+export function useUsersFindOneQuery(baseOptions: Apollo.QueryHookOptions<UsersFindOneQuery, UsersFindOneQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<UsersFindOneQuery, UsersFindOneQueryVariables>(UsersFindOneDocument, options);
+      }
+export function useUsersFindOneLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<UsersFindOneQuery, UsersFindOneQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<UsersFindOneQuery, UsersFindOneQueryVariables>(UsersFindOneDocument, options);
+        }
+export type UsersFindOneQueryHookResult = ReturnType<typeof useUsersFindOneQuery>;
+export type UsersFindOneLazyQueryHookResult = ReturnType<typeof useUsersFindOneLazyQuery>;
+export type UsersFindOneQueryResult = Apollo.QueryResult<UsersFindOneQuery, UsersFindOneQueryVariables>;
+export function refetchUsersFindOneQuery(variables?: UsersFindOneQueryVariables) {
+      return { query: UsersFindOneDocument, variables: variables }
+    }

@@ -1,4 +1,5 @@
-import { Column, CreateDateColumn, Entity, Generated, Index, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, Generated, Index, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Chat } from "./chat";
 
 @Entity()
 export class Account {
@@ -22,4 +23,7 @@ export class Account {
   
     @UpdateDateColumn({ nullable: false })
     public updatedAt!: Date;
+
+    @OneToMany(() => Chat, (chat) => chat.poster)
+    chats!: Chat[];
 }

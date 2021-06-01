@@ -1,5 +1,6 @@
 import { AuthenticationError } from "apollo-server-express";
 import { Users, Account } from "../../core";
+import { AuthenticatedContext } from "../../types/resolver-context";
 import { 
     MutationUserCreateArgs,
     MutationUserDestroyArgs,
@@ -11,11 +12,6 @@ import {
     UsersListAllResponse,
     UserUpdateResponse,
 } from "../generated";
-
-export type AuthenticatedContext = {
-    account?: Account;
-    createAccountRuleJWT?: string;
-};
 
 export const userCreate = async (
     _parent: unknown,
