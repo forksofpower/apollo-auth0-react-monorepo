@@ -5,6 +5,7 @@ export const accounts = gql`
   type Account {
     "The account email"
     email: String!
+    chats: [Chat]!
   }
 
   "The accountFindOrCreate input"
