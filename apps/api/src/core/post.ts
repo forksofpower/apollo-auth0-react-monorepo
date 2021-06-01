@@ -19,6 +19,6 @@ export class Post {
     @CreateDateColumn({ nullable: false })
     public createdAt!: Date;
 
-    @ManyToOne(() => Account, (account) => account.posts, { nullable: false })
+    @ManyToOne(() => Account, (account) => account.posts)
     account!: Account;
 }

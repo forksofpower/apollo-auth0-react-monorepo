@@ -34,21 +34,26 @@ export const postCreate = async (
     { input: { post: { content } }}: MutationPostCreateArgs,
     { account }: AuthenticatedContext
 ): Promise<PostCreateResponse> => {
-    if (!account) {
-        throw new AuthenticationError('The request is not authenticated.');
+    // if (!account) {
+    //     throw new AuthenticationError('The request is not authenticated.');
+    // }
+    try {
+        const result = await Posts.create({ content, accountId: 1 });
+        return { post: formatGraphPost(result) }
+    } catch(error) {
+        console.log(error);
+        throw error;
     }
-    const result = await Posts.create({ content, accountId: account.id });
-    return { post: formatGraphPost(result) }
 };
 
 export const postUpdate = async (
     _parent: unknown,
     { input: { post }}: MutationPostUpdateArgs,
-    context: AuthenticatedContext
+    _context: AuthenticatedContext
 ): Promise<PostUpdateResponse> => {
-    if (!context.account) {
-        throw new AuthenticationError('The request is not authenticated.');
-    }
+    // if (!context.account) {
+    //     throw new AuthenticationError('The request is not authenticated.');
+    // }
     const id = post.id;
     delete post.id; // strip out fields that shouldn't be updated?
     const result = await Posts.update(id, post) as Post;
@@ -58,8 +63,11 @@ export const postUpdate = async (
 export const postDestroy = async (
     _parent: unknown,
     { input: { postId }}: MutationPostDestroyArgs,
-    context: AuthenticatedContext
+    _context: AuthenticatedContext
 ): Promise<PostDestroyResponse> => {
+    // if (!context.account) {
+    //     throw new AuthenticationError('The request is not authenticated.');
+    // }
     const result = await Posts.destroy(postId);
     return { post: formatGraphPost(result) }
 };
@@ -67,11 +75,11 @@ export const postDestroy = async (
 export const postsListAll = async (
     _parent: unknown,
     _args: unknown,
-    context: AuthenticatedContext
+    _context: AuthenticatedContext
 ): Promise<PostsListAllResponse> => {
-    if (!context.account) {
-        throw new AuthenticationError('The request is not authenticated.');
-    }
+    // if (!context.account) {
+    //     throw new AuthenticationError('The request is not authenticated.');
+    // }
     const posts = await Posts.listAll();
 
     return { posts: formatGraphPostList(posts) };
@@ -80,11 +88,11 @@ export const postsListAll = async (
 export const postsFindOne = async (
     _parent: unknown,
     { input: { postId }}: QueryPostsFindOneArgs,
-    context: AuthenticatedContext
+    _context: AuthenticatedContext
 ): Promise<PostsFindOneResponse> => {
-    if (!context.account) {
-        throw new AuthenticationError('The request is not authenticated.');
-    }
+    // if (!context.account) {
+    //     throw new AuthenticationError('The request is not authenticated.');
+    // }
     const post = await Posts.findById(postId);
 
     return { post: formatGraphPost(post) };

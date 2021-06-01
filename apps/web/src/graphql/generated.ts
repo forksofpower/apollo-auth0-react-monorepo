@@ -21,15 +21,14 @@ export type Scalars = {
 
 /** The account */
 export type Account = {
-  __typename?: "Account";
   /** The account id */
   id: Scalars["Int"];
   /** The account email */
   email: Scalars["String"];
   /** The list of account chats */
-  chats: Array<Maybe<Chat>>;
+  chats: Array<Chat>;
   /** The list of account posts */
-  posts: Array<Maybe<Post>>;
+  posts: Array<Post>;
 };
 
 /** The accountFindOrCreate input */
@@ -42,13 +41,11 @@ export type AccountFindOrCreateInput = {
 
 /** The accountFindOrCreate response */
 export type AccountFindOrCreateResponse = {
-  __typename?: "AccountFindOrCreateResponse";
   /** The new account */
   account?: Maybe<Account>;
 };
 
 export type Chat = {
-  __typename?: "Chat";
   id: Scalars["Int"];
   message: Scalars["String"];
   createdAt: Scalars["DateTime"];
@@ -56,17 +53,14 @@ export type Chat = {
 };
 
 export type ChatResponse = {
-  __typename?: "ChatResponse";
   message: Chat;
 };
 
 export type ChatsListAllResponse = {
-  __typename?: "ChatsListAllResponse";
   messages: Array<Chat>;
 };
 
 export type Mutation = {
-  __typename?: "Mutation";
   /** Find or create an account */
   accountFindOrCreate: AccountFindOrCreateResponse;
   postCreate: PostCreateResponse;
@@ -97,7 +91,6 @@ export type MutationSendMessageArgs = {
 };
 
 export type Post = {
-  __typename?: "Post";
   id: Scalars["Int"];
   content: Scalars["String"];
   createdAt: Scalars["DateTime"];
@@ -109,7 +102,6 @@ export type PostCreateInput = {
 };
 
 export type PostCreateResponse = {
-  __typename?: "PostCreateResponse";
   post?: Maybe<Post>;
 };
 
@@ -118,7 +110,6 @@ export type PostDestroyInput = {
 };
 
 export type PostDestroyResponse = {
-  __typename?: "PostDestroyResponse";
   post?: Maybe<Post>;
 };
 
@@ -132,7 +123,6 @@ export type PostUpdateInput = {
 };
 
 export type PostUpdateResponse = {
-  __typename?: "PostUpdateResponse";
   post?: Maybe<Post>;
 };
 
@@ -141,17 +131,14 @@ export type PostsFindOneInput = {
 };
 
 export type PostsFindOneResponse = {
-  __typename?: "PostsFindOneResponse";
   post?: Maybe<Post>;
 };
 
 export type PostsListAllResponse = {
-  __typename?: "PostsListAllResponse";
   posts: Array<Post>;
 };
 
 export type Query = {
-  __typename?: "Query";
   chatsListAll?: Maybe<ChatsListAllResponse>;
   postsFindOne: PostsFindOneResponse;
   postsListAll: PostsListAllResponse;
@@ -162,61 +149,45 @@ export type QueryPostsFindOneArgs = {
 };
 
 export type Subscription = {
-  __typename?: "Subscription";
   messageSent?: Maybe<ChatResponse>;
 };
 
-export type PostFragment = { __typename?: "Post" } & Pick<
-  Post,
-  "id" | "content" | "createdAt"
-> & { account: { __typename?: "Account" } & Pick<Account, "email"> };
+export type PostFragment = Pick<Post, "id" | "content" | "createdAt"> & {
+  account: Pick<Account, "email">;
+};
 
 export type PostCreateMutationVariables = Exact<{
   input: PostCreateInput;
 }>;
 
-export type PostCreateMutation = { __typename?: "Mutation" } & {
-  postCreate: { __typename?: "PostCreateResponse" } & {
-    post?: Maybe<{ __typename?: "Post" } & PostFragment>;
-  };
-};
+export type PostCreateMutation = { postCreate: { post?: Maybe<PostFragment> } };
 
 export type PostUpdateMutationVariables = Exact<{
   input: PostUpdateInput;
 }>;
 
-export type PostUpdateMutation = { __typename?: "Mutation" } & {
-  postUpdate: { __typename?: "PostUpdateResponse" } & {
-    post?: Maybe<{ __typename?: "Post" } & PostFragment>;
-  };
-};
+export type PostUpdateMutation = { postUpdate: { post?: Maybe<PostFragment> } };
 
 export type PostDestroyMutationVariables = Exact<{
   input: PostDestroyInput;
 }>;
 
-export type PostDestroyMutation = { __typename?: "Mutation" } & {
-  postDestroy: { __typename?: "PostDestroyResponse" } & {
-    post?: Maybe<{ __typename?: "Post" } & PostFragment>;
-  };
+export type PostDestroyMutation = {
+  postDestroy: { post?: Maybe<PostFragment> };
 };
 
 export type PostsListAllQueryVariables = Exact<{ [key: string]: never }>;
 
-export type PostsListAllQuery = { __typename?: "Query" } & {
-  postsListAll: { __typename?: "PostsListAllResponse" } & {
-    posts: Array<{ __typename?: "Post" } & PostFragment>;
-  };
+export type PostsListAllQuery = {
+  postsListAll: { posts: Array<PostFragment> };
 };
 
 export type PostsFindOneQueryVariables = Exact<{
   input: PostsFindOneInput;
 }>;
 
-export type PostsFindOneQuery = { __typename?: "Query" } & {
-  postsFindOne: { __typename?: "PostsFindOneResponse" } & {
-    post?: Maybe<{ __typename?: "Post" } & PostFragment>;
-  };
+export type PostsFindOneQuery = {
+  postsFindOne: { post?: Maybe<PostFragment> };
 };
 
 export const PostFragmentDoc = gql`

@@ -2,7 +2,7 @@ import { BaseEntity, Column, CreateDateColumn, Entity, ManyToOne, OneToMany, Pri
 import { Account } from "./account";
 
 @Entity()
-export class Chat extends BaseEntity {
+export class Chat {
     @PrimaryGeneratedColumn()
     id!: number;
 

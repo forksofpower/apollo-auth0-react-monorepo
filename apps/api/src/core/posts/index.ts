@@ -15,8 +15,9 @@ const postRepo = () => getManager().getRepository<Post>('Post');
 
 export const listAll = async (): Promise<Post[]> => {
     const repo = postRepo();
-    
-    return await repo.find();
+    const posts = await repo.find({ relations: ['account', 'account.posts'] });
+    console.log(posts);
+    return posts;
 }
 
 /**
@@ -44,6 +45,7 @@ export interface CreateParams {
 export const create = async ({ content, accountId }: CreateParams): Promise<Post> => {
     const repo = postRepo();
     const account = await Accounts.accountFindByPrimaryKey(accountId);
+    console.log(account);
     const post = await repo.create({ content, account });
     
     return await repo.save(post);

@@ -3,7 +3,7 @@ import { Chat } from "./chat";
 import { Post } from "./post";
 
 @Entity()
-export class Account extends BaseEntity {
+export class Account {
     @PrimaryGeneratedColumn()
     id!: number;
 
@@ -29,5 +29,5 @@ export class Account extends BaseEntity {
     chats!: Chat[];
 
     @OneToMany(() => Post, (post) => post.account)
-    posts!: Chat[];
+    posts!: Post[];
 }

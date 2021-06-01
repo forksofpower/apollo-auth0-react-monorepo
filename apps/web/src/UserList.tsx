@@ -1,22 +1,22 @@
 import React from "react";
-import { User } from "./graphql";
-import useUsers from "./hooks/useUsers";
+import { Post } from "./graphql";
+import usePosts from "./hooks/usePosts";
 
-const UserList: React.FC = () => {
-  const { users, usersLoading } = useUsers();
+const PostList: React.FC = () => {
+  const { posts, postsLoading } = usePosts();
 
   return (
     <>
-      {!usersLoading
-        ? users.map((user: User) => (
-            <div key={user.id}>
-              {`${user.firstName} ${user.lastName}`}
-              <small>{user.email}</small>
+      {!postsLoading
+        ? posts.map((post: Post) => (
+            <div key={post.id}>
+              {post.content}
+              <small>{post.account.email}</small>
             </div>
           ))
-        : "loading users..."}
+        : "loading posts..."}
     </>
   );
 };
 
-export default UserList;
+export default PostList;

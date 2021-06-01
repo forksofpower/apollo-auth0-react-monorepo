@@ -8,9 +8,9 @@ export const accounts = gql`
     "The account email"
     email: String!
     "The list of account chats"
-    chats: [Chat]!
+    chats: [Chat!]!
     "The list of account posts"
-    posts: [Post]!
+    posts: [Post!]!
   }
 
   "The accountFindOrCreate input"

@@ -22,9 +22,9 @@ export type Account = {
   /** The account email */
   email: Scalars['String'];
   /** The list of account chats */
-  chats: Array<Maybe<Chat>>;
+  chats: Array<Chat>;
   /** The list of account posts */
-  posts: Array<Maybe<Post>>;
+  posts: Array<Post>;
 };
 
 /** The accountFindOrCreate input */
@@ -304,8 +304,8 @@ export type ResolversParentTypes = ResolversObject<{
 export type AccountResolvers<ContextType = any, ParentType extends ResolversParentTypes['Account'] = ResolversParentTypes['Account']> = ResolversObject<{
   id?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   email?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  chats?: Resolver<Array<Maybe<ResolversTypes['Chat']>>, ParentType, ContextType>;
-  posts?: Resolver<Array<Maybe<ResolversTypes['Post']>>, ParentType, ContextType>;
+  chats?: Resolver<Array<ResolversTypes['Chat']>, ParentType, ContextType>;
+  posts?: Resolver<Array<ResolversTypes['Post']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
