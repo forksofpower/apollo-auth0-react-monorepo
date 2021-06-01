@@ -3,9 +3,14 @@ import { gql } from 'graphql-tag';
 export const accounts = gql`
   "The account"
   type Account {
+    "The account id"
+    id: Int!
     "The account email"
     email: String!
+    "The list of account chats"
     chats: [Chat]!
+    "The list of account posts"
+    posts: [Post]!
   }
 
   "The accountFindOrCreate input"

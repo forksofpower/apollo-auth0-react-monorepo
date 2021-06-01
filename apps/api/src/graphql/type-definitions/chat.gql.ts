@@ -1,11 +1,13 @@
 import { gql } from 'graphql-tag';
 
 export const chats = gql`
+  scalar DateTime
+
   type Chat {
     id: Int!
-    from: String!
     message: String!
-    poster: Account!
+    createdAt: DateTime!
+    account: Account!
   }
 
   type ChatResponse {

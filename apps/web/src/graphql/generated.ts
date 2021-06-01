@@ -1,10 +1,14 @@
-import { gql } from '@apollo/client';
-import * as Apollo from '@apollo/client';
+import { gql } from "@apollo/client";
+import * as Apollo from "@apollo/client";
 export type Maybe<T> = T | undefined;
-export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
-export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
-export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
-const defaultOptions =  {}
+export type Exact<T extends { [key: string]: unknown }> = {
+  [K in keyof T]: T[K];
+};
+export type MakeOptional<T, K extends keyof T> = Omit<T, K> &
+  { [SubKey in K]?: Maybe<T[SubKey]> };
+export type MakeMaybe<T, K extends keyof T> = Omit<T, K> &
+  { [SubKey in K]: Maybe<T[SubKey]> };
+const defaultOptions = {};
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: string;
@@ -12,366 +16,506 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
+  DateTime: any;
 };
 
 /** The account */
 export type Account = {
+  __typename?: "Account";
+  /** The account id */
+  id: Scalars["Int"];
   /** The account email */
-  email: Scalars['String'];
+  email: Scalars["String"];
+  /** The list of account chats */
+  chats: Array<Maybe<Chat>>;
+  /** The list of account posts */
+  posts: Array<Maybe<Post>>;
 };
 
 /** The accountFindOrCreate input */
 export type AccountFindOrCreateInput = {
   /** The account email address */
-  email: Scalars['String'];
+  email: Scalars["String"];
   /** The account identity provider subject (must be unique) */
-  auth0UserId: Scalars['String'];
+  auth0UserId: Scalars["String"];
 };
 
 /** The accountFindOrCreate response */
 export type AccountFindOrCreateResponse = {
+  __typename?: "AccountFindOrCreateResponse";
   /** The new account */
   account?: Maybe<Account>;
 };
 
 export type Chat = {
-  id: Scalars['Int'];
-  from: Scalars['String'];
-  message: Scalars['String'];
+  __typename?: "Chat";
+  id: Scalars["Int"];
+  message: Scalars["String"];
+  createdAt: Scalars["DateTime"];
+  account: Account;
 };
 
 export type ChatResponse = {
+  __typename?: "ChatResponse";
   message: Chat;
 };
 
 export type ChatsListAllResponse = {
+  __typename?: "ChatsListAllResponse";
   messages: Array<Chat>;
 };
 
 export type Mutation = {
+  __typename?: "Mutation";
   /** Find or create an account */
   accountFindOrCreate: AccountFindOrCreateResponse;
+  postCreate: PostCreateResponse;
+  postDestroy: PostDestroyResponse;
+  postUpdate: PostUpdateResponse;
   sendMessage?: Maybe<ChatResponse>;
-  userCreate: UserCreateResponse;
-  userDestroy: UserDestroyResponse;
-  userUpdate: UserUpdateResponse;
 };
-
 
 export type MutationAccountFindOrCreateArgs = {
   input: AccountFindOrCreateInput;
 };
 
+export type MutationPostCreateArgs = {
+  input: PostCreateInput;
+};
+
+export type MutationPostDestroyArgs = {
+  input: PostDestroyInput;
+};
+
+export type MutationPostUpdateArgs = {
+  input: PostUpdateInput;
+};
 
 export type MutationSendMessageArgs = {
-  from: Scalars['String'];
-  message: Scalars['String'];
+  from: Scalars["String"];
+  message: Scalars["String"];
 };
 
-
-export type MutationUserCreateArgs = {
-  input: UserCreateInput;
+export type Post = {
+  __typename?: "Post";
+  id: Scalars["Int"];
+  content: Scalars["String"];
+  createdAt: Scalars["DateTime"];
+  account: Account;
 };
 
-
-export type MutationUserDestroyArgs = {
-  input: UserDestroyInput;
+export type PostCreateInput = {
+  post: PostInput;
 };
 
+export type PostCreateResponse = {
+  __typename?: "PostCreateResponse";
+  post?: Maybe<Post>;
+};
 
-export type MutationUserUpdateArgs = {
-  input: UserUpdateInput;
+export type PostDestroyInput = {
+  postId: Scalars["Int"];
+};
+
+export type PostDestroyResponse = {
+  __typename?: "PostDestroyResponse";
+  post?: Maybe<Post>;
+};
+
+export type PostInput = {
+  id?: Maybe<Scalars["Int"]>;
+  content?: Maybe<Scalars["String"]>;
+};
+
+export type PostUpdateInput = {
+  post: PostInput;
+};
+
+export type PostUpdateResponse = {
+  __typename?: "PostUpdateResponse";
+  post?: Maybe<Post>;
+};
+
+export type PostsFindOneInput = {
+  postId: Scalars["Int"];
+};
+
+export type PostsFindOneResponse = {
+  __typename?: "PostsFindOneResponse";
+  post?: Maybe<Post>;
+};
+
+export type PostsListAllResponse = {
+  __typename?: "PostsListAllResponse";
+  posts: Array<Post>;
 };
 
 export type Query = {
+  __typename?: "Query";
   chatsListAll?: Maybe<ChatsListAllResponse>;
-  usersFindOne: UsersFindOneResponse;
-  usersListAll: UsersListAllResponse;
+  postsFindOne: PostsFindOneResponse;
+  postsListAll: PostsListAllResponse;
 };
 
-
-export type QueryUsersFindOneArgs = {
-  input: UsersFindOneInput;
+export type QueryPostsFindOneArgs = {
+  input: PostsFindOneInput;
 };
 
 export type Subscription = {
+  __typename?: "Subscription";
   messageSent?: Maybe<ChatResponse>;
 };
 
-export type User = {
-  id: Scalars['Int'];
-  email: Scalars['String'];
-  firstName: Scalars['String'];
-  lastName: Scalars['String'];
-};
+export type PostFragment = { __typename?: "Post" } & Pick<
+  Post,
+  "id" | "content" | "createdAt"
+> & { account: { __typename?: "Account" } & Pick<Account, "email"> };
 
-export type UserCreateInput = {
-  user: UserInput;
-};
-
-export type UserCreateResponse = {
-  user?: Maybe<User>;
-};
-
-export type UserDestroyInput = {
-  userId: Scalars['Int'];
-};
-
-export type UserDestroyResponse = {
-  user?: Maybe<User>;
-};
-
-export type UserInput = {
-  id?: Maybe<Scalars['Int']>;
-  email: Scalars['String'];
-  firstName: Scalars['String'];
-  lastName: Scalars['String'];
-};
-
-export type UserUpdateInput = {
-  user: UserInput;
-};
-
-export type UserUpdateResponse = {
-  user?: Maybe<User>;
-};
-
-export type UsersFindOneInput = {
-  userId: Scalars['Int'];
-};
-
-export type UsersFindOneResponse = {
-  user?: Maybe<User>;
-};
-
-export type UsersListAllResponse = {
-  users: Array<User>;
-};
-
-export type UserFragment = Pick<User, 'id' | 'email' | 'firstName' | 'lastName'>;
-
-export type UserCreateMutationVariables = Exact<{
-  input: UserCreateInput;
+export type PostCreateMutationVariables = Exact<{
+  input: PostCreateInput;
 }>;
 
+export type PostCreateMutation = { __typename?: "Mutation" } & {
+  postCreate: { __typename?: "PostCreateResponse" } & {
+    post?: Maybe<{ __typename?: "Post" } & PostFragment>;
+  };
+};
 
-export type UserCreateMutation = { userCreate: { user?: Maybe<UserFragment> } };
-
-export type UserUpdateMutationVariables = Exact<{
-  input: UserUpdateInput;
+export type PostUpdateMutationVariables = Exact<{
+  input: PostUpdateInput;
 }>;
 
+export type PostUpdateMutation = { __typename?: "Mutation" } & {
+  postUpdate: { __typename?: "PostUpdateResponse" } & {
+    post?: Maybe<{ __typename?: "Post" } & PostFragment>;
+  };
+};
 
-export type UserUpdateMutation = { userUpdate: { user?: Maybe<UserFragment> } };
-
-export type UserDestroyMutationVariables = Exact<{
-  input: UserDestroyInput;
+export type PostDestroyMutationVariables = Exact<{
+  input: PostDestroyInput;
 }>;
 
+export type PostDestroyMutation = { __typename?: "Mutation" } & {
+  postDestroy: { __typename?: "PostDestroyResponse" } & {
+    post?: Maybe<{ __typename?: "Post" } & PostFragment>;
+  };
+};
 
-export type UserDestroyMutation = { userDestroy: { user?: Maybe<UserFragment> } };
+export type PostsListAllQueryVariables = Exact<{ [key: string]: never }>;
 
-export type UsersListAllQueryVariables = Exact<{ [key: string]: never; }>;
+export type PostsListAllQuery = { __typename?: "Query" } & {
+  postsListAll: { __typename?: "PostsListAllResponse" } & {
+    posts: Array<{ __typename?: "Post" } & PostFragment>;
+  };
+};
 
-
-export type UsersListAllQuery = { usersListAll: { users: Array<UserFragment> } };
-
-export type UsersFindOneQueryVariables = Exact<{
-  input: UsersFindOneInput;
+export type PostsFindOneQueryVariables = Exact<{
+  input: PostsFindOneInput;
 }>;
 
+export type PostsFindOneQuery = { __typename?: "Query" } & {
+  postsFindOne: { __typename?: "PostsFindOneResponse" } & {
+    post?: Maybe<{ __typename?: "Post" } & PostFragment>;
+  };
+};
 
-export type UsersFindOneQuery = { usersFindOne: { user?: Maybe<UserFragment> } };
-
-export const UserFragmentDoc = gql`
-    fragment User on User {
-  id
-  email
-  firstName
-  lastName
-}
-    `;
-export const UserCreateDocument = gql`
-    mutation UserCreate($input: UserCreateInput!) {
-  userCreate(input: $input) {
-    user {
-      ...User
+export const PostFragmentDoc = gql`
+  fragment Post on Post {
+    id
+    content
+    createdAt
+    account {
+      email
     }
   }
-}
-    ${UserFragmentDoc}`;
-export type UserCreateMutationFn = Apollo.MutationFunction<UserCreateMutation, UserCreateMutationVariables>;
+`;
+export const PostCreateDocument = gql`
+  mutation PostCreate($input: PostCreateInput!) {
+    postCreate(input: $input) {
+      post {
+        ...Post
+      }
+    }
+  }
+  ${PostFragmentDoc}
+`;
+export type PostCreateMutationFn = Apollo.MutationFunction<
+  PostCreateMutation,
+  PostCreateMutationVariables
+>;
 
 /**
- * __useUserCreateMutation__
+ * __usePostCreateMutation__
  *
- * To run a mutation, you first call `useUserCreateMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useUserCreateMutation` returns a tuple that includes:
+ * To run a mutation, you first call `usePostCreateMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `usePostCreateMutation` returns a tuple that includes:
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
  * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const [userCreateMutation, { data, loading, error }] = useUserCreateMutation({
+ * const [postCreateMutation, { data, loading, error }] = usePostCreateMutation({
  *   variables: {
  *      input: // value for 'input'
  *   },
  * });
  */
-export function useUserCreateMutation(baseOptions?: Apollo.MutationHookOptions<UserCreateMutation, UserCreateMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<UserCreateMutation, UserCreateMutationVariables>(UserCreateDocument, options);
+export function usePostCreateMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    PostCreateMutation,
+    PostCreateMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<PostCreateMutation, PostCreateMutationVariables>(
+    PostCreateDocument,
+    options
+  );
+}
+export type PostCreateMutationHookResult = ReturnType<
+  typeof usePostCreateMutation
+>;
+export type PostCreateMutationResult =
+  Apollo.MutationResult<PostCreateMutation>;
+export type PostCreateMutationOptions = Apollo.BaseMutationOptions<
+  PostCreateMutation,
+  PostCreateMutationVariables
+>;
+export const PostUpdateDocument = gql`
+  mutation PostUpdate($input: PostUpdateInput!) {
+    postUpdate(input: $input) {
+      post {
+        ...Post
       }
-export type UserCreateMutationHookResult = ReturnType<typeof useUserCreateMutation>;
-export type UserCreateMutationResult = Apollo.MutationResult<UserCreateMutation>;
-export type UserCreateMutationOptions = Apollo.BaseMutationOptions<UserCreateMutation, UserCreateMutationVariables>;
-export const UserUpdateDocument = gql`
-    mutation UserUpdate($input: UserUpdateInput!) {
-  userUpdate(input: $input) {
-    user {
-      ...User
     }
   }
-}
-    ${UserFragmentDoc}`;
-export type UserUpdateMutationFn = Apollo.MutationFunction<UserUpdateMutation, UserUpdateMutationVariables>;
+  ${PostFragmentDoc}
+`;
+export type PostUpdateMutationFn = Apollo.MutationFunction<
+  PostUpdateMutation,
+  PostUpdateMutationVariables
+>;
 
 /**
- * __useUserUpdateMutation__
+ * __usePostUpdateMutation__
  *
- * To run a mutation, you first call `useUserUpdateMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useUserUpdateMutation` returns a tuple that includes:
+ * To run a mutation, you first call `usePostUpdateMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `usePostUpdateMutation` returns a tuple that includes:
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
  * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const [userUpdateMutation, { data, loading, error }] = useUserUpdateMutation({
+ * const [postUpdateMutation, { data, loading, error }] = usePostUpdateMutation({
  *   variables: {
  *      input: // value for 'input'
  *   },
  * });
  */
-export function useUserUpdateMutation(baseOptions?: Apollo.MutationHookOptions<UserUpdateMutation, UserUpdateMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<UserUpdateMutation, UserUpdateMutationVariables>(UserUpdateDocument, options);
+export function usePostUpdateMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    PostUpdateMutation,
+    PostUpdateMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<PostUpdateMutation, PostUpdateMutationVariables>(
+    PostUpdateDocument,
+    options
+  );
+}
+export type PostUpdateMutationHookResult = ReturnType<
+  typeof usePostUpdateMutation
+>;
+export type PostUpdateMutationResult =
+  Apollo.MutationResult<PostUpdateMutation>;
+export type PostUpdateMutationOptions = Apollo.BaseMutationOptions<
+  PostUpdateMutation,
+  PostUpdateMutationVariables
+>;
+export const PostDestroyDocument = gql`
+  mutation PostDestroy($input: PostDestroyInput!) {
+    postDestroy(input: $input) {
+      post {
+        ...Post
       }
-export type UserUpdateMutationHookResult = ReturnType<typeof useUserUpdateMutation>;
-export type UserUpdateMutationResult = Apollo.MutationResult<UserUpdateMutation>;
-export type UserUpdateMutationOptions = Apollo.BaseMutationOptions<UserUpdateMutation, UserUpdateMutationVariables>;
-export const UserDestroyDocument = gql`
-    mutation UserDestroy($input: UserDestroyInput!) {
-  userDestroy(input: $input) {
-    user {
-      ...User
     }
   }
-}
-    ${UserFragmentDoc}`;
-export type UserDestroyMutationFn = Apollo.MutationFunction<UserDestroyMutation, UserDestroyMutationVariables>;
+  ${PostFragmentDoc}
+`;
+export type PostDestroyMutationFn = Apollo.MutationFunction<
+  PostDestroyMutation,
+  PostDestroyMutationVariables
+>;
 
 /**
- * __useUserDestroyMutation__
+ * __usePostDestroyMutation__
  *
- * To run a mutation, you first call `useUserDestroyMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useUserDestroyMutation` returns a tuple that includes:
+ * To run a mutation, you first call `usePostDestroyMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `usePostDestroyMutation` returns a tuple that includes:
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
  * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const [userDestroyMutation, { data, loading, error }] = useUserDestroyMutation({
+ * const [postDestroyMutation, { data, loading, error }] = usePostDestroyMutation({
  *   variables: {
  *      input: // value for 'input'
  *   },
  * });
  */
-export function useUserDestroyMutation(baseOptions?: Apollo.MutationHookOptions<UserDestroyMutation, UserDestroyMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<UserDestroyMutation, UserDestroyMutationVariables>(UserDestroyDocument, options);
+export function usePostDestroyMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    PostDestroyMutation,
+    PostDestroyMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<PostDestroyMutation, PostDestroyMutationVariables>(
+    PostDestroyDocument,
+    options
+  );
+}
+export type PostDestroyMutationHookResult = ReturnType<
+  typeof usePostDestroyMutation
+>;
+export type PostDestroyMutationResult =
+  Apollo.MutationResult<PostDestroyMutation>;
+export type PostDestroyMutationOptions = Apollo.BaseMutationOptions<
+  PostDestroyMutation,
+  PostDestroyMutationVariables
+>;
+export const PostsListAllDocument = gql`
+  query PostsListAll {
+    postsListAll {
+      posts {
+        ...Post
       }
-export type UserDestroyMutationHookResult = ReturnType<typeof useUserDestroyMutation>;
-export type UserDestroyMutationResult = Apollo.MutationResult<UserDestroyMutation>;
-export type UserDestroyMutationOptions = Apollo.BaseMutationOptions<UserDestroyMutation, UserDestroyMutationVariables>;
-export const UsersListAllDocument = gql`
-    query UsersListAll {
-  usersListAll {
-    users {
-      ...User
     }
   }
-}
-    ${UserFragmentDoc}`;
+  ${PostFragmentDoc}
+`;
 
 /**
- * __useUsersListAllQuery__
+ * __usePostsListAllQuery__
  *
- * To run a query within a React component, call `useUsersListAllQuery` and pass it any options that fit your needs.
- * When your component renders, `useUsersListAllQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `usePostsListAllQuery` and pass it any options that fit your needs.
+ * When your component renders, `usePostsListAllQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useUsersListAllQuery({
+ * const { data, loading, error } = usePostsListAllQuery({
  *   variables: {
  *   },
  * });
  */
-export function useUsersListAllQuery(baseOptions?: Apollo.QueryHookOptions<UsersListAllQuery, UsersListAllQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<UsersListAllQuery, UsersListAllQueryVariables>(UsersListAllDocument, options);
+export function usePostsListAllQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    PostsListAllQuery,
+    PostsListAllQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<PostsListAllQuery, PostsListAllQueryVariables>(
+    PostsListAllDocument,
+    options
+  );
+}
+export function usePostsListAllLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    PostsListAllQuery,
+    PostsListAllQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<PostsListAllQuery, PostsListAllQueryVariables>(
+    PostsListAllDocument,
+    options
+  );
+}
+export type PostsListAllQueryHookResult = ReturnType<
+  typeof usePostsListAllQuery
+>;
+export type PostsListAllLazyQueryHookResult = ReturnType<
+  typeof usePostsListAllLazyQuery
+>;
+export type PostsListAllQueryResult = Apollo.QueryResult<
+  PostsListAllQuery,
+  PostsListAllQueryVariables
+>;
+export function refetchPostsListAllQuery(
+  variables?: PostsListAllQueryVariables
+) {
+  return { query: PostsListAllDocument, variables: variables };
+}
+export const PostsFindOneDocument = gql`
+  query PostsFindOne($input: PostsFindOneInput!) {
+    postsFindOne(input: $input) {
+      post {
+        ...Post
       }
-export function useUsersListAllLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<UsersListAllQuery, UsersListAllQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<UsersListAllQuery, UsersListAllQueryVariables>(UsersListAllDocument, options);
-        }
-export type UsersListAllQueryHookResult = ReturnType<typeof useUsersListAllQuery>;
-export type UsersListAllLazyQueryHookResult = ReturnType<typeof useUsersListAllLazyQuery>;
-export type UsersListAllQueryResult = Apollo.QueryResult<UsersListAllQuery, UsersListAllQueryVariables>;
-export function refetchUsersListAllQuery(variables?: UsersListAllQueryVariables) {
-      return { query: UsersListAllDocument, variables: variables }
-    }
-export const UsersFindOneDocument = gql`
-    query UsersFindOne($input: UsersFindOneInput!) {
-  usersFindOne(input: $input) {
-    user {
-      ...User
     }
   }
-}
-    ${UserFragmentDoc}`;
+  ${PostFragmentDoc}
+`;
 
 /**
- * __useUsersFindOneQuery__
+ * __usePostsFindOneQuery__
  *
- * To run a query within a React component, call `useUsersFindOneQuery` and pass it any options that fit your needs.
- * When your component renders, `useUsersFindOneQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `usePostsFindOneQuery` and pass it any options that fit your needs.
+ * When your component renders, `usePostsFindOneQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useUsersFindOneQuery({
+ * const { data, loading, error } = usePostsFindOneQuery({
  *   variables: {
  *      input: // value for 'input'
  *   },
  * });
  */
-export function useUsersFindOneQuery(baseOptions: Apollo.QueryHookOptions<UsersFindOneQuery, UsersFindOneQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<UsersFindOneQuery, UsersFindOneQueryVariables>(UsersFindOneDocument, options);
-      }
-export function useUsersFindOneLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<UsersFindOneQuery, UsersFindOneQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<UsersFindOneQuery, UsersFindOneQueryVariables>(UsersFindOneDocument, options);
-        }
-export type UsersFindOneQueryHookResult = ReturnType<typeof useUsersFindOneQuery>;
-export type UsersFindOneLazyQueryHookResult = ReturnType<typeof useUsersFindOneLazyQuery>;
-export type UsersFindOneQueryResult = Apollo.QueryResult<UsersFindOneQuery, UsersFindOneQueryVariables>;
-export function refetchUsersFindOneQuery(variables?: UsersFindOneQueryVariables) {
-      return { query: UsersFindOneDocument, variables: variables }
-    }
+export function usePostsFindOneQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    PostsFindOneQuery,
+    PostsFindOneQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<PostsFindOneQuery, PostsFindOneQueryVariables>(
+    PostsFindOneDocument,
+    options
+  );
+}
+export function usePostsFindOneLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    PostsFindOneQuery,
+    PostsFindOneQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<PostsFindOneQuery, PostsFindOneQueryVariables>(
+    PostsFindOneDocument,
+    options
+  );
+}
+export type PostsFindOneQueryHookResult = ReturnType<
+  typeof usePostsFindOneQuery
+>;
+export type PostsFindOneLazyQueryHookResult = ReturnType<
+  typeof usePostsFindOneLazyQuery
+>;
+export type PostsFindOneQueryResult = Apollo.QueryResult<
+  PostsFindOneQuery,
+  PostsFindOneQueryVariables
+>;
+export function refetchPostsFindOneQuery(
+  variables?: PostsFindOneQueryVariables
+) {
+  return { query: PostsFindOneDocument, variables: variables };
+}

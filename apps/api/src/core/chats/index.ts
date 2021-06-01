@@ -2,7 +2,7 @@ import { getManager } from "typeorm"
 import { Chat } from "../chat"
 
 /**
- * User repository helper
+ * Chat repository helper
  */
 const chatRepo = () => getManager().getRepository<Chat>('Chat');
 

@@ -1,27 +1,29 @@
 import { Resolvers } from "./generated";
+import GraphQLDateTime from 'graphql-type-datetime';
 
 import {
-    userCreate, userUpdate, userDestroy, usersFindOne, usersListAll
-} from './resolvers/user';
+    postCreate, postUpdate, postDestroy, postsFindOne, postsListAll
+} from './resolvers/post';
 import { create as accountFindOrCreate } from './resolvers/account'
 import { listAll as chatsListAll, sendMessage, messageSent } from './resolvers/chat';
 
 const resolvers: Resolvers = {
     Query: {
-        usersFindOne,
-        usersListAll,
+        postsFindOne,
+        postsListAll,
         chatsListAll,
     },
     Mutation: {
         accountFindOrCreate,
         sendMessage,
-        userCreate,
-        userUpdate,
-        userDestroy
+        postCreate,
+        postUpdate,
+        postDestroy
     },
     Subscription: {
         messageSent
-    }
+    },
+    DateTime: GraphQLDateTime
 }
 
 export default resolvers;

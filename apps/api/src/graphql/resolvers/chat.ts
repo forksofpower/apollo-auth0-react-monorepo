@@ -1,15 +1,28 @@
-import { Chats } from "../../core";
+import { Chats, Chat } from "../../core";
 import { AuthenticatedContext, SubscriptionContext } from "../../types/resolver-context";
-import { Chat, ChatResponse, ChatsListAllResponse, MutationSendMessageArgs, ResolverTypeWrapper, SubscriptionResolver, SubscriptionResolverObject } from "../generated";
+import { Chat as GraphChat, ChatResponse, ChatsListAllResponse, MutationSendMessageArgs, Account as GraphAccount } from "../generated";
 
 const CHAT_CHANNEL = 'CHAT_CHANNEL';
+
+const formatChatMessage = (chat: Chat): GraphChat  => {
+    return {
+        id: chat.id,
+        createdAt: chat.createdAt,
+        message: chat.message,
+        account: chat.account as unknown as GraphAccount
+    }
+}
+
+const formatChatMessageList = (chats: Chat[]): GraphChat[] => {
+    return chats.map(chat => formatChatMessage(chat));
+}
 
 /**
  * Query Resolvers
  */
 export const listAll = async (): Promise<ChatsListAllResponse> => {
-    const messages = await Chats.listAll();
-    return { messages };
+    const chats = await Chats.listAll();
+    return { messages: formatChatMessageList(chats) };
 }
 
 /**
@@ -23,7 +36,7 @@ export const sendMessage = async (
     const chat = await Chats.sendMessage({ from, message });
     pubsub.publish('CHAT_CHANNEL', { messageSent: chat })
 
-    return { message: chat}
+    return { message: formatChatMessage(chat) }
 }
 
 /**
